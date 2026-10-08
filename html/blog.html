@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2D0000">
+    <meta name="description"
+        content="The Stackly journal — perspectives on product thinking, operational clarity, and the human side of building software for teams.">
+    <title>Blog — Stackly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="../global.css">
+    <link rel="stylesheet" href="../css/blog.css">
+</head>
+
+<body>
+    <header class="site-header" id="siteHeader">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html" aria-label="Stackly home"><img src="../logo.webp"
+                    alt="Stackly"></a>
+            <nav class="desktop-nav" aria-label="Primary navigation">
+                <a href="../index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="services.html">Services</a>
+                <a class="active" href="blog.html" aria-current="page">Blog</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="header-right">
+                <a class="header-login" href="login.html">Login</a>
+                <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-controls="mobileMenu"
+                    aria-expanded="false"><span></span><span></span></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-menu__top"><img class="mobile-menu__logo" src="../logo.webp" alt="Stackly"><button
+                class="mobile-menu__close" id="menuClose" aria-label="Close menu">×</button></div>
+        <nav class="mobile-menu__nav" aria-label="Mobile navigation">
+            <a href="../index.html"><span>Home</span></a>
+            <a href="about.html"><span>About</span></a>
+            <a href="services.html"><span>Services</span></a>
+            <a href="blog.html"><span>Blog</span></a>
+            <a href="contact.html"><span>Contact</span></a>
+            <a class="mobile-menu__login" href="login.html"><span>Login</span></a>
+        </nav>
+        <div class="mobile-menu__bottom"><span>Software for teams that move with intent.</span><span>Salem ·
+                India</span></div>
+    </div>
+
+    <main>
+
+        <!-- ============ HERO ============ -->
+        <section class="bl-hero">
+            <div class="bl-hero__glow" aria-hidden="true"></div>
+            <div class="bl-hero__inner">
+                <div class="bl-hero__copy reveal-left">
+                    <span class="eyebrow">The journal</span>
+                    <h1 class="display">Writing about the way work actually happens.</h1>
+                    <p class="bl-hero__lead">Perspectives on product thinking, operational clarity, and the human side
+                        of building software for teams. Long enough to be useful, short enough to finish.</p>
+                    <div class="bl-hero__actions">
+                        <a class="btn btn--solid" href="services.html">Explore the platform</a>
+                        <a class="btn btn--light" href="contact.html">Talk to our team</a>
+                    </div>
+                </div>
+
+                <article class="bl-hero__feature reveal-right">
+                    <a class="bl-hero__feature-link" href="../404.html" aria-label="Read the featured essay">
+                        <div class="bl-hero__feature-media media-frame">
+                            <img src="../assets/photo_1499750310.webp"
+                                alt="A writing desk with notebook and morning light">
+                        </div>
+                        <div class="bl-hero__feature-body">
+                            <div class="bl-hero__feature-meta">
+                                <span class="bl-hero__feature-tag">Featured essay</span>
+                                <span class="bl-hero__feature-time">Long read</span>
+                            </div>
+                            <h2>Why the space between a signal and a decision is where software earns its keep.</h2>
+                            <p>Most tools stop at information. The useful ones carry context all the way to the moment
+                                somebody has to choose.</p>
+                            <span class="bl-hero__feature-cta">Read the essay</span>
+                        </div>
+                    </a>
+                </article>
+            </div>
+
+            <div class="bl-hero__band">
+                <div class="container bl-hero__band-inner">
+                    <div class="reveal-left"><strong>Product thinking</strong><span>How tools shape judgement</span>
+                    </div>
+                    <div class="reveal-up"><strong>Operations</strong><span>Workflows that survive contact</span></div>
+                    <div class="reveal-right"><strong>Teams</strong><span>Context, attention, and trust</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ WHY WE WRITE ============ -->
+        <section class="bl-statement section-pad">
+            <div class="container bl-statement__grid">
+                <div class="bl-statement__media reveal-image-left">
+                    <div class="media-frame">
+                        <img src="../assets/photo_1481277542.webp"
+                            alt="Person reading in a quiet, light-filled space" loading="lazy">
+                    </div>
+                    <div class="bl-statement__badge reveal-right">
+                        <strong>Notes, not announcements</strong>
+                        <span>Written for the reader, not the release note.</span>
+                    </div>
+                </div>
+
+                <div class="bl-statement__copy reveal-right">
+                    <span class="eyebrow">Why we write</span>
+                    <h2 class="display">We think in public because the thinking improves.</h2>
+                    <p>Product decisions get better when the reasoning is written down where other people can push on
+                        it. This journal is our version of that practice — arguments made carefully, revised in the
+                        open, and left up even when they turn out to be wrong.</p>
+                    <p>There is no editorial calendar chasing news. Pieces appear when there is something worth saying,
+                        and they stay short when the idea is small.</p>
+
+                    <dl class="bl-statement__facts">
+                        <div>
+                            <dt>What appears here</dt>
+                            <dd>Essays, notes, and short observations from the work.</dd>
+                        </div>
+                        <div>
+                            <dt>How often</dt>
+                            <dd>When there is something worth saying.</dd>
+                        </div>
+                        <div>
+                            <dt>What it is not</dt>
+                            <dd>A marketing channel wearing a blog's clothes.</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ FEATURED ESSAY ============ -->
+        <section class="bl-featured section-pad">
+            <div class="container">
+                <div class="bl-featured__head reveal-left">
+                    <span class="eyebrow">This month's essay</span>
+                    <h2 class="display">The hidden tax of work that lives in too many places.</h2>
+                </div>
+
+                <div class="bl-featured__layout">
+                    <div class="bl-featured__copy reveal-left">
+                        <p class="bl-featured__lede">Fragmentation rarely shows up as a single dramatic failure. It
+                            shows up as a slow draw on attention — the quiet cost of reconstructing a situation before
+                            you can act on it.</p>
+                        <p>Teams rarely describe their problem as "context is scattered." They describe it as constant
+                            catching up: the same conversation happening in three channels, the decision that only
+                            lives in someone's memory, the document that exists in a version nobody is sure is current.
+                        </p>
+                        <p>This essay traces how that cost accumulates and why the fix is less about adding a tool and
+                            more about deciding where context is allowed to live.</p>
+                        <a class="bl-featured__link" href="../404.html">Read the full essay</a>
+                    </div>
+
+                    <div class="bl-featured__visual reveal-image-right">
+                        <div class="media-frame">
+                            <img src="../assets/photo_1455390582.webp"
+                                alt="Notebook and pen on a desk, ready for writing" loading="lazy">
+                        </div>
+                        <div class="bl-featured__meta reveal-up">
+                            <div><span>Reading time</span><strong>12 min</strong></div>
+                            <div><span>Column</span><strong>Operations</strong></div>
+                            <div><span>Status</span><strong>Illustrative</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ TOPICS ============ -->
+        <section class="bl-topics">
+            <div class="bl-topics__glow" aria-hidden="true"></div>
+            <div class="container bl-topics__inner">
+                <div class="bl-topics__head reveal-left">
+                    <span class="eyebrow">Topics</span>
+                    <h2 class="display">Four threads we keep returning to.</h2>
+                    <p>Every piece in the journal sits somewhere within these themes. They are not categories so much
+                        as recurring questions.</p>
+                </div>
+
+                <div class="bl-topics__grid">
+                    <article class="bl-topic reveal-up">
+                        <span class="bl-topic__index" aria-hidden="true">—</span>
+                        <h3>Product thinking</h3>
+                        <p>How interfaces shape judgement, why defaults matter more than features, and what makes a tool
+                            feel trustworthy.</p>
+                    </article>
+                    <article class="bl-topic reveal-up">
+                        <span class="bl-topic__index" aria-hidden="true">—</span>
+                        <h3>Operations</h3>
+                        <p>The distance between a documented process and the one that actually runs, and how to close
+                            it.</p>
+                    </article>
+                    <article class="bl-topic reveal-up">
+                        <span class="bl-topic__index" aria-hidden="true">—</span>
+                        <h3>Teams</h3>
+                        <p>Collaboration, attention, ownership, and the parts of work that resist being reduced to a
+                            ticket.</p>
+                    </article>
+                    <article class="bl-topic reveal-up">
+                        <span class="bl-topic__index" aria-hidden="true">—</span>
+                        <h3>Craft</h3>
+                        <p>Typography, motion, wording, and the small decisions that make a product feel considered.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ LATEST WRITING ============ -->
+        <section class="bl-latest section-pad">
+            <div class="container">
+                <div class="section-intro">
+                    <div class="reveal-left"><span class="eyebrow">Latest writing</span></div>
+                    <div class="reveal-right">
+                        <h2 class="display">Recent pieces from the journal.</h2>
+                        <p>Essays, notes, and short observations, in the order they were written.</p>
+                    </div>
+                </div>
+
+                <div class="bl-latest__grid">
+                    <article class="bl-card bl-card--lead reveal-left">
+                        <a class="bl-card__link" href="../404.html">
+                            <div class="bl-card__image media-frame">
+                                <img src="../assets/photo_1497366754.webp"
+                                    alt="Modern open office space" loading="lazy">
+                            </div>
+                            <div class="bl-card__meta">
+                                <span class="bl-card__tag">Product thinking</span>
+                                <span class="bl-card__time">8 min read</span>
+                            </div>
+                            <h3>Clarity is the most underrated feature in software.</h3>
+                            <p>Capability gets the attention. Comprehension is what actually changes what a team does
+                                next.</p>
+                            <span class="bl-card__cta">Read the piece</span>
+                        </a>
+                    </article>
+
+                    <article class="bl-card reveal-up">
+                        <a class="bl-card__link" href="../404.html">
+                            <div class="bl-card__image media-frame">
+                                <img src="../assets/photo_1497366216.webp"
+                                    alt="Collaborative workspace with seating areas" loading="lazy">
+                            </div>
+                            <div class="bl-card__meta">
+                                <span class="bl-card__tag">Teams</span>
+                                <span class="bl-card__time">6 min read</span>
+                            </div>
+                            <h3>The private workaround is a design signal.</h3>
+                            <p>When people keep a spreadsheet alongside the platform, that spreadsheet is telling you
+                                something.</p>
+                            <span class="bl-card__cta">Read the piece</span>
+                        </a>
+                    </article>
+
+                    <article class="bl-card reveal-up">
+                        <a class="bl-card__link" href="../404.html">
+                            <div class="bl-card__image media-frame">
+                                <img src="../assets/photo_1552664730.webp"
+                                    alt="Team reviewing material together" loading="lazy">
+                            </div>
+                            <div class="bl-card__meta">
+                                <span class="bl-card__tag">Operations</span>
+                                <span class="bl-card__time">9 min read</span>
+                            </div>
+                            <h3>Designing workflows people choose to use.</h3>
+                            <p>Adoption is usually a design problem long before it becomes a training problem.</p>
+                            <span class="bl-card__cta">Read the piece</span>
+                        </a>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ LONG READS ============ -->
+        <section class="bl-reads section-pad">
+            <div class="container bl-reads__grid">
+                <div class="bl-reads__copy reveal-left">
+                    <span class="eyebrow">Long reads</span>
+                    <h2 class="display">Pieces worth the slow pass.</h2>
+                    <p>Some ideas need room. These are the essays that took longer to write and, we hope, take a little
+                        longer to read — arguments followed all the way through rather than summarised early.</p>
+
+                    <div class="bl-reads__list">
+                        <a class="bl-reads__item" href="../404.html">
+                            <span class="bl-reads__num" aria-hidden="true"></span>
+                            <div>
+                                <h3>The architecture of a decision</h3>
+                                <p>What a workspace has to carry for a choice to be made well.</p>
+                            </div>
+                        </a>
+                        <a class="bl-reads__item" href="../404.html">
+                            <span class="bl-reads__num" aria-hidden="true"></span>
+                            <div>
+                                <h3>Against busy dashboards</h3>
+                                <p>Why more numbers rarely produce better judgement.</p>
+                            </div>
+                        </a>
+                        <a class="bl-reads__item" href="../404.html">
+                            <span class="bl-reads__num" aria-hidden="true"></span>
+                            <div>
+                                <h3>The second week problem</h3>
+                                <p>Designing for the Tuesday afternoon when novelty has worn off.</p>
+                            </div>
+                        </a>
+                        <a class="bl-reads__item" href="../404.html">
+                            <span class="bl-reads__num" aria-hidden="true"></span>
+                            <div>
+                                <h3>On legible automation</h3>
+                                <p>Flows that can be explained by the people they affect.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bl-reads__media reveal-image-right">
+                    <div class="media-frame">
+                        <img src="../assets/photo_1507842217.webp"
+                            alt="Library shelves suggesting depth and long-form reading" loading="lazy">
+                    </div>
+                    <div class="bl-reads__panel reveal-up">
+                        <strong>Long-form, kept honest</strong>
+                        <span>Every long read carries a summary at the top so you can decide whether it is for
+                            you.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ SHORT NOTES ============ -->
+        <section class="bl-notes">
+            <div class="bl-notes__media">
+                <img src="../assets/photo_1517842645.webp"
+                    alt="Notebook and pen on a wooden desk, lit softly" loading="lazy">
+            </div>
+            <div class="container bl-notes__inner">
+                <div class="bl-notes__head reveal-left">
+                    <span class="eyebrow">Short notes</span>
+                    <h2 class="display">Small observations, written down before they disappear.</h2>
+                    <p>Not every idea deserves an essay. These are fragments — a paragraph, sometimes two — that were
+                        worth keeping.</p>
+                </div>
+
+                <div class="bl-notes__list">
+                    <article class="bl-note reveal-right">
+                        <div class="bl-note__meta"><span>Note</span><span>On clarity</span></div>
+                        <h3>The best empty state is a sentence someone actually wrote.</h3>
+                    </article>
+                    <article class="bl-note reveal-left">
+                        <div class="bl-note__meta"><span>Note</span><span>On operations</span></div>
+                        <h3>If a workflow needs a meeting to explain it, it probably needs a redesign.</h3>
+                    </article>
+                    <article class="bl-note reveal-right">
+                        <div class="bl-note__meta"><span>Note</span><span>On teams</span></div>
+                        <h3>Ownership is not a field. It is the confidence that somebody will notice.</h3>
+                    </article>
+                    <article class="bl-note reveal-left">
+                        <div class="bl-note__meta"><span>Note</span><span>On craft</span></div>
+                        <h3>Motion should confirm an action, then get out of the way. Anything else is performance.</h3>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ COLUMNS ============ -->
+        <section class="bl-columns section-pad">
+            <div class="container">
+                <div class="section-intro">
+                    <div class="reveal-left"><span class="eyebrow">Recurring columns</span></div>
+                    <div class="reveal-right">
+                        <h2 class="display">Three threads that keep pulling us back.</h2>
+                        <p>Rather than organise the journal by date alone, a few pieces belong to ongoing columns — each
+                            one following a single question across many months.</p>
+                    </div>
+                </div>
+
+                <div class="bl-columns__grid">
+                    <article class="bl-column reveal-image-left">
+                        <div class="bl-column__media media-frame">
+                            <img src="../assets/photo_1524995997.webp"
+                                alt="Books arranged on shelves" loading="lazy">
+                        </div>
+                        <div class="bl-column__body">
+                            <span class="bl-column__tag">Column</span>
+                            <h3>On the shape of work</h3>
+                            <p>How operating models drift, and what it takes to notice before the drift becomes the
+                                norm.</p>
+                            <a class="bl-column__link" href="../404.html">Follow the column</a>
+                        </div>
+                    </article>
+
+                    <article class="bl-column bl-column--offset reveal-image-right">
+                        <div class="bl-column__media media-frame">
+                            <img src="../assets/photo_1499750310.webp"
+                                alt="Writing desk with notebook and coffee" loading="lazy">
+                        </div>
+                        <div class="bl-column__body">
+                            <span class="bl-column__tag">Column</span>
+                            <h3>Notes on craft</h3>
+                            <p>Short pieces on the details that decide whether a product feels considered or
+                                assembled.</p>
+                            <a class="bl-column__link" href="../404.html">Follow the column</a>
+                        </div>
+                    </article>
+
+                    <article class="bl-column reveal-image-left">
+                        <div class="bl-column__media media-frame">
+                            <img src="../assets/photo_1521737711.webp"
+                                alt="Colleagues working together around a table" loading="lazy">
+                        </div>
+                        <div class="bl-column__body">
+                            <span class="bl-column__tag">Column</span>
+                            <h3>Teams, in practice</h3>
+                            <p>Collaboration observed from inside real workflows rather than from a framework diagram.
+                            </p>
+                            <a class="bl-column__link" href="../404.html">Follow the column</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ARCHIVE ============ -->
+        <section class="bl-archive">
+            <div class="container bl-archive__inner">
+                <div class="bl-archive__head reveal-left">
+                    <span class="eyebrow">From the archive</span>
+                    <h2 class="display">Older pieces, still holding up.</h2>
+                    <p>Not everything ages well. These are the ones we still stand behind.</p>
+                </div>
+
+                <div class="bl-archive__list">
+                    <a class="bl-archive__row reveal-right" href="../404.html">
+                        <span class="bl-archive__title">Why we removed the notification bell from the workspace</span>
+                        <span class="bl-archive__meta">Product thinking</span>
+                    </a>
+                    <a class="bl-archive__row reveal-left" href="../404.html">
+                        <span class="bl-archive__title">The case for fewer, finished capabilities</span>
+                        <span class="bl-archive__meta">Craft</span>
+                    </a>
+                    <a class="bl-archive__row reveal-right" href="../404.html">
+                        <span class="bl-archive__title">What teams mean when they say they are "aligned"</span>
+                        <span class="bl-archive__meta">Teams</span>
+                    </a>
+                    <a class="bl-archive__row reveal-left" href="../404.html">
+                        <span class="bl-archive__title">Automation is a contract, not a convenience</span>
+                        <span class="bl-archive__meta">Operations</span>
+                    </a>
+                    <a class="bl-archive__row reveal-right" href="../404.html">
+                        <span class="bl-archive__title">On the quiet dignity of an empty inbox</span>
+                        <span class="bl-archive__meta">Operations</span>
+                    </a>
+                    <a class="bl-archive__row reveal-left" href="../404.html">
+                        <span class="bl-archive__title">Designing for the person who arrives in month six</span>
+                        <span class="bl-archive__meta">Product thinking</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ FINAL CTA ============ -->
+        <section class="cta">
+            <div class="cta__inner">
+                <div class="reveal-left">
+                    <span class="eyebrow">Ready when you are</span>
+                    <h2 class="display">See how these ideas look inside a product.</h2>
+                    <p>The journal is where we think out loud. The platform is where that thinking becomes something a
+                        team can actually use.</p>
+                </div>
+                <div class="reveal-right">
+                    <a class="btn btn--light" href="services.html">Explore the platform</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer__main">
+            <div class="footer-brand"><img src="../logo.webp" alt="Stackly">
+                <p>A focused SaaS platform for teams that want clearer workflows, stronger context, and better ways to
+                    move work forward.</p>
+                <div class="footer-socials-brand">
+                    <a href="../404.html" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg></a>
+                    <a href="../404.html" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                    <a href="../404.html" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    <a href="../404.html" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">Navigation</div>
+                <div class="footer-links">
+                    <a href="../index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="services.html">Services</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">Explore</div>
+                <div class="footer-links">
+                    <a href="../404.html">Product</a>
+                    <a href="../404.html">Documentation</a>
+                    <a href="../404.html">Status</a>
+                    <a href="../404.html">Careers</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">Contact</div>
+                <div class="footer-links">
+                    <a class="footer-contact-item" href="../404.html"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>Stackly, Salem, TN, India</span></a>
+                    <a class="footer-contact-item" href="../404.html"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span>+1 (800) 555-0199</span></a>
+                    <a class="footer-contact-item" href="../404.html"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span>hello@stackly.com</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="site-footer__bottom"><span>© 2026 Stackly SaaS</span>
+            <div class="footer-legal-links"><a href="../404.html">Privacy Policy</a><a href="../404.html">Terms</a><a href="../404.html">Legal</a></div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+        (function () {
+            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            window.addEventListener('load', function () { window.scrollTo(0, 0); });
+
+            const header = document.getElementById('siteHeader');
+            const toggle = document.getElementById('menuToggle');
+            const menu = document.getElementById('mobileMenu');
+            const close = document.getElementById('menuClose');
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const setHeader = () => header.classList.toggle('scrolled', window.scrollY > 30);
+            setHeader();
+            window.addEventListener('scroll', setHeader, { passive: true });
+
+            function openMenu() {
+                menu.classList.add('is-open');
+                menu.setAttribute('aria-hidden', 'false');
+                toggle.setAttribute('aria-expanded', 'true');
+                document.body.classList.add('menu-open');
+                if (window.gsap && !reduce) {
+                    gsap.fromTo('.mobile-menu__nav a span',
+                        { y: 70, opacity: 0 },
+                        { y: 0, opacity: 1, duration: .65, stagger: .06, ease: 'power4.out', delay: .12 });
+                }
+            }
+
+            function closeMenu() {
+                menu.classList.remove('is-open');
+                menu.setAttribute('aria-hidden', 'true');
+                toggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
+            }
+
+            toggle.addEventListener('click', openMenu);
+            close.addEventListener('click', closeMenu);
+            menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
+            });
+
+            if (!window.gsap || reduce) return;
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.utils.toArray('.reveal-left').forEach(el => gsap.fromTo(el,
+                { x: -75, opacity: 0 },
+                { x: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+
+            gsap.utils.toArray('.reveal-right').forEach(el => gsap.fromTo(el,
+                { x: 75, opacity: 0 },
+                { x: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+
+            gsap.utils.toArray('.reveal-up').forEach(el => gsap.fromTo(el,
+                { y: 55, opacity: 0 },
+                { y: 0, opacity: 1, duration: .85, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } }));
+
+            gsap.utils.toArray('.reveal-image-left').forEach(el => gsap.fromTo(el,
+                { x: -90, opacity: 0, clipPath: 'inset(0 14% 0 14%)' },
+                { x: 0, opacity: 1, clipPath: 'inset(0 0% 0 0%)', duration: 1.15, ease: 'power4.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+
+            gsap.utils.toArray('.reveal-image-right').forEach(el => gsap.fromTo(el,
+                { x: 90, opacity: 0, clipPath: 'inset(0 14% 0 14%)' },
+                { x: 0, opacity: 1, clipPath: 'inset(0 0% 0 0%)', duration: 1.15, ease: 'power4.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+
+            gsap.fromTo('.bl-hero__copy', { x: -70, opacity: 0 },
+                { x: 0, opacity: 1, duration: 1.1, ease: 'power4.out', delay: .15 });
+            gsap.fromTo('.bl-hero__feature', { x: 70, opacity: 0, scale: .97 },
+                { x: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power4.out', delay: .3 });
+        })();
+    </script>
+</body>
+
+</html>

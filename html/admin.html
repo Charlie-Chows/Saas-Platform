@@ -1,0 +1,3495 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2D0000">
+    <meta name="description"
+        content="Stackly administration — platform management, users, system health, and analytics.">
+    <meta name="robots" content="noindex">
+    <title>Administration — Stackly</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           TOKENS
+           ============================================================ */
+        :root {
+            --ink: #2D0000;
+            --red: #6D0808;
+            --olive: #757D6F;
+            --ivory: #EEEAD7;
+            --white: #fffdf7;
+            --line: rgba(45, 0, 0, .14);
+            --line-soft: rgba(45, 0, 0, .07);
+            --line-light: rgba(238, 234, 215, .16);
+            --muted: #66645b;
+            --green: #6F8F6A;
+            --amber: #B98534;
+            --topbar-h: 76px;
+            --side-w: 272px;
+            --display: 'Manrope', Arial, sans-serif;
+            --body: 'DM Sans', Arial, sans-serif;
+            --ease: cubic-bezier(.22, .8, .2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: var(--body);
+            color: var(--ink);
+            background: var(--ivory);
+            line-height: 1.55;
+            overflow-x: hidden;
+            min-height: 100svh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+            background: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        img,
+        svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        ul,
+        ol {
+            list-style: none;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--red);
+            outline-offset: 3px;
+        }
+
+        /* ============================================================
+           APP SHELL — fixed sidebar, offset main
+           ============================================================ */
+        .app {
+            min-height: 100svh;
+        }
+
+        .app__main {
+            margin-left: var(--side-w);
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* ============================================================
+           SIDEBAR
+           ============================================================ */
+        .side {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--side-w);
+            background: var(--ink);
+            color: rgba(238, 234, 215, .72);
+            display: flex;
+            flex-direction: column;
+            padding: 22px 20px 18px;
+            gap: 20px;
+            overflow-y: auto;
+            z-index: 50;
+            border-right: 1px solid rgba(238, 234, 215, .06);
+        }
+
+        .side__brand {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--line-light);
+        }
+
+        .side__logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            width: max-content;
+        }
+
+        .side__logo img {
+            width: 108px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .side__chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            width: max-content;
+            font: 700 .58rem var(--display);
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--ivory);
+            background: var(--red);
+            padding: 5px 10px;
+        }
+
+        .side__chip::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: var(--ivory);
+            border-radius: 50%;
+        }
+
+        .side__nav {
+            display: grid;
+            gap: 2px;
+        }
+
+        .side__link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 14px 11px 18px;
+            font-size: .84rem;
+            font-weight: 500;
+            color: rgba(238, 234, 215, .68);
+            transition: color .25s ease, background .25s ease;
+            text-align: left;
+            width: 100%;
+        }
+
+        .side__link svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            opacity: .8;
+        }
+
+        .side__link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 2px;
+            height: 22px;
+            background: var(--red);
+            transform: translateY(-50%) scaleY(0);
+            transform-origin: center;
+            transition: transform .3s var(--ease);
+        }
+
+        .side__link:hover {
+            color: var(--ivory);
+            background: rgba(238, 234, 215, .04);
+        }
+
+        .side__link.is-active {
+            color: var(--ivory);
+            background: rgba(238, 234, 215, .06);
+        }
+
+        .side__link.is-active::before {
+            transform: translateY(-50%) scaleY(1);
+        }
+
+        .side__foot {
+            margin-top: auto;
+            display: grid;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--line-light);
+        }
+
+        .side__user {
+            display: grid;
+            gap: 10px;
+            padding: 14px;
+            background: rgba(238, 234, 215, .05);
+            border: 1px solid rgba(238, 234, 215, .1);
+        }
+
+        .side__user-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .side__avatar {
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            background: var(--red);
+            color: var(--ivory);
+            font: 700 .74rem var(--display);
+            letter-spacing: .04em;
+        }
+
+        .side__user-info {
+            min-width: 0;
+            display: grid;
+            gap: 2px;
+        }
+
+        .side__user-info strong {
+            font: 600 .84rem var(--display);
+            color: var(--ivory);
+            letter-spacing: -.005em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .side__user-info span {
+            font-size: .68rem;
+            color: rgba(238, 234, 215, .5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .side__role {
+            font-size: .56rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--olive);
+        }
+
+        .side__logout {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 0 16px;
+            border: 1px solid rgba(238, 234, 215, .28);
+            color: var(--ivory);
+            font-size: .68rem;
+            text-transform: uppercase;
+            letter-spacing: .16em;
+            font-weight: 700;
+            transition: background .3s ease, border-color .3s ease, transform .3s var(--ease);
+        }
+
+        .side__logout:hover {
+            background: var(--red);
+            border-color: var(--red);
+            transform: translateY(-1px);
+        }
+
+        .side__logout svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        /* ============================================================
+           OVERLAY
+           ============================================================ */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(45, 0, 0, .55);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 45;
+            transition: opacity .35s var(--ease), visibility .35s var(--ease);
+            pointer-events: none;
+        }
+
+        .overlay.is-open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        /* ============================================================
+           TOPBAR (fixed)
+           ============================================================ */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: var(--side-w);
+            right: 0;
+            height: var(--topbar-h);
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 0 30px;
+            background: rgba(238, 234, 215, .92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .topbar__left,
+        .topbar__right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .topbar__menu {
+            display: none;
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--line);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0;
+            background: var(--white);
+        }
+
+        .topbar__menu span {
+            width: 16px;
+            height: 1px;
+            background: var(--ink);
+        }
+
+        .topbar__hello {
+            display: grid;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .topbar__hello small {
+            font-size: .62rem;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+            font-weight: 700;
+            color: var(--olive);
+        }
+
+        .topbar__hello strong {
+            font: 700 1rem var(--display);
+            letter-spacing: -.015em;
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar__hello strong em {
+            font-style: normal;
+            color: var(--red);
+        }
+
+        .topbar__search {
+            position: relative;
+            display: flex;
+            align-items: center;
+            max-width: 340px;
+            width: 100%;
+        }
+
+        .topbar__search svg {
+            position: absolute;
+            left: 14px;
+            width: 15px;
+            height: 15px;
+            color: var(--olive);
+            pointer-events: none;
+        }
+
+        .topbar__search input {
+            width: 100%;
+            height: 42px;
+            background: var(--white);
+            border: 1px solid var(--line);
+            padding: 0 16px 0 40px;
+            font-size: .85rem;
+            color: var(--ink);
+            transition: border-color .25s ease, box-shadow .25s ease;
+        }
+
+        .topbar__search input::placeholder {
+            color: rgba(102, 100, 91, .55);
+        }
+
+        .topbar__search input:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 0 3px rgba(109, 8, 8, .12);
+        }
+
+        .topbar__bell {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--line);
+            display: grid;
+            place-items: center;
+            background: var(--white);
+            transition: border-color .25s ease, color .25s ease;
+        }
+
+        .topbar__bell svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .topbar__bell:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .topbar__bell-dot {
+            position: absolute;
+            top: 9px;
+            right: 10px;
+            width: 7px;
+            height: 7px;
+            background: var(--red);
+            border-radius: 50%;
+            border: 1.5px solid var(--white);
+        }
+
+        .topbar__profile {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 12px 5px 5px;
+            border: 1px solid var(--line);
+            background: var(--white);
+            transition: border-color .25s ease, transform .25s var(--ease);
+            min-width: 0;
+        }
+
+        .topbar__profile:hover {
+            border-color: var(--red);
+            transform: translateY(-1px);
+        }
+
+        .topbar__profile-avatar {
+            width: 32px;
+            height: 32px;
+            display: grid;
+            place-items: center;
+            background: var(--ink);
+            color: var(--ivory);
+            font: 700 .68rem var(--display);
+            letter-spacing: .04em;
+            flex-shrink: 0;
+        }
+
+        .topbar__profile-email {
+            font-size: .78rem;
+            color: var(--ink);
+            font-weight: 500;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ============================================================
+           MAIN
+           ============================================================ */
+        .main {
+            flex: 1;
+            padding: calc(var(--topbar-h) + 26px) 30px 40px;
+            display: grid;
+            gap: 22px;
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            min-width: 0;
+        }
+
+        /* ============================================================
+           PANELS
+           ============================================================ */
+        .panel {
+            display: none;
+            gap: 20px;
+            min-width: 0;
+        }
+
+        .panel.is-active {
+            display: grid;
+        }
+
+        .panel__head {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 24px;
+            align-items: end;
+            min-width: 0;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: .64rem;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+            font-weight: 700;
+            color: var(--olive);
+        }
+
+        .eyebrow::before {
+            content: '';
+            width: 22px;
+            height: 1px;
+            background: currentColor;
+        }
+
+        .display {
+            font-family: var(--display);
+            font-weight: 700;
+            letter-spacing: -.055em;
+            line-height: 1.02;
+        }
+
+        .panel__head h1 {
+            font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+            margin: 10px 0 8px;
+            max-width: 640px;
+        }
+
+        .panel__head p {
+            color: var(--muted);
+            font-size: .92rem;
+            max-width: 520px;
+        }
+
+        .panel__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-self: end;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 44px;
+            padding: 0 20px;
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            font-weight: 700;
+            border: 1px solid var(--ink);
+            color: var(--ink);
+            background: transparent;
+            transition: background .3s ease, color .3s ease, border-color .3s ease, transform .3s var(--ease);
+            white-space: nowrap;
+        }
+
+        .btn::after {
+            content: '↗';
+            font-size: .95rem;
+            line-height: 0;
+            transition: transform .3s var(--ease);
+        }
+
+        .btn:hover {
+            background: var(--ink);
+            color: var(--ivory);
+            transform: translateY(-2px);
+        }
+
+        .btn:hover::after {
+            transform: translate(3px, -3px);
+        }
+
+        .btn--solid {
+            background: var(--red);
+            border-color: var(--red);
+            color: var(--ivory);
+        }
+
+        .btn--solid:hover {
+            background: var(--ink);
+            border-color: var(--ink);
+        }
+
+        .btn--ghost {
+            border-color: var(--line);
+        }
+
+        .btn--ghost:hover {
+            border-color: var(--ink);
+        }
+
+        /* ============================================================
+           STATS
+           ============================================================ */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .stat {
+            position: relative;
+            background: var(--white);
+            border: 1px solid var(--line);
+            padding: 22px 22px 20px;
+            display: grid;
+            gap: 8px;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        .stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 34px;
+            height: 2px;
+            background: var(--red);
+        }
+
+        .stat__label {
+            font-size: .62rem;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            color: var(--olive);
+            font-weight: 700;
+        }
+
+        .stat__value {
+            font: 700 2.3rem var(--display);
+            letter-spacing: -.05em;
+            line-height: 1;
+            color: var(--ink);
+            display: inline-flex;
+            align-items: baseline;
+            gap: 4px;
+            word-break: break-word;
+        }
+
+        .stat__value-sub {
+            font-size: .95rem;
+            color: var(--olive);
+            letter-spacing: -.02em;
+        }
+
+        .stat__note {
+            font-size: .74rem;
+            color: var(--muted);
+        }
+
+        .stat__spark {
+            position: absolute;
+            right: 16px;
+            top: 18px;
+            width: 52px;
+            height: 26px;
+            opacity: .8;
+            pointer-events: none;
+        }
+
+        /* ============================================================
+           CARDS
+           ============================================================ */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            padding: 24px 24px 22px;
+            display: grid;
+            gap: 18px;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .card__head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--line);
+            min-width: 0;
+        }
+
+        .card__title {
+            font: 700 1.1rem var(--display);
+            letter-spacing: -.02em;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .card__sub {
+            font-size: .74rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .card__chip {
+            flex-shrink: 0;
+            font-size: .58rem;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            font-weight: 700;
+            color: var(--olive);
+            border: 1px solid var(--line);
+            padding: 6px 10px;
+            white-space: nowrap;
+        }
+
+        .card__link {
+            flex-shrink: 0;
+            font-size: .62rem;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            font-weight: 700;
+            color: var(--ink);
+            border-bottom: 1px solid var(--red);
+            padding-bottom: 3px;
+            transition: color .25s ease;
+            white-space: nowrap;
+        }
+
+        .card__link:hover {
+            color: var(--red);
+        }
+
+        .card__foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line);
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        .card__note {
+            font-size: .58rem;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            color: var(--olive);
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           GRIDS
+           ============================================================ */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+            gap: 18px;
+            align-items: stretch;
+            min-width: 0;
+        }
+
+        .grid-2--even {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            min-width: 0;
+        }
+
+        .grid-2>*,
+        .grid-3>* {
+            min-width: 0;
+        }
+
+        /* ============================================================
+           CHART
+           ============================================================ */
+        .chart {
+            width: 100%;
+            position: relative;
+            min-width: 0;
+        }
+
+        .chart svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .chart--standard {
+            aspect-ratio: 800 / 220;
+        }
+
+        .chart--tall {
+            aspect-ratio: 800 / 300;
+        }
+
+        .legend {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: .7rem;
+        }
+
+        .legend__dot {
+            width: 9px;
+            height: 9px;
+            background: var(--red);
+            flex-shrink: 0;
+        }
+
+        .legend__dot--olive {
+            background: var(--olive);
+        }
+
+        .legend__dot--amber {
+            background: var(--amber);
+        }
+
+        /* ============================================================
+           USER TABLE
+           ============================================================ */
+        .utable {
+            display: grid;
+            gap: 0;
+        }
+
+        .utable__head {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr .8fr;
+            gap: 16px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: .58rem;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            color: var(--olive);
+            font-weight: 700;
+        }
+
+        .utable__row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr .8fr;
+            gap: 16px;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .utable__row:last-child {
+            border-bottom: 0;
+        }
+
+        .utable__user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .utable__avatar {
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            background: var(--ivory);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            font: 700 .64rem var(--display);
+            letter-spacing: .04em;
+        }
+
+        .utable__info {
+            display: grid;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .utable__info strong {
+            font: 600 .84rem var(--display);
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .utable__info span {
+            font-size: .68rem;
+            color: var(--muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .utable__role {
+            font-size: .68rem;
+            color: var(--olive);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-weight: 600;
+        }
+
+        .utable__status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: .68rem;
+            color: var(--muted);
+        }
+
+        .utable__status i {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--olive);
+            display: block;
+            flex-shrink: 0;
+        }
+
+        .utable__status--active i {
+            background: var(--green);
+        }
+
+        .utable__status--suspended i {
+            background: var(--red);
+        }
+
+        .utable__seen {
+            font-size: .68rem;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        /* ============================================================
+           INCIDENTS
+           ============================================================ */
+        .incident {
+            display: grid;
+            grid-template-columns: 10px 1fr auto;
+            gap: 14px;
+            align-items: start;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .incident:last-child {
+            border-bottom: 0;
+        }
+
+        .incident__dot {
+            width: 10px;
+            height: 10px;
+            margin-top: 6px;
+            border-radius: 50%;
+            background: var(--olive);
+            flex-shrink: 0;
+        }
+
+        .incident--critical .incident__dot {
+            background: var(--red);
+            box-shadow: 0 0 0 4px rgba(109, 8, 8, .14);
+        }
+
+        .incident--warning .incident__dot {
+            background: var(--amber);
+            box-shadow: 0 0 0 4px rgba(185, 133, 52, .16);
+        }
+
+        .incident--resolved .incident__dot {
+            background: var(--green);
+        }
+
+        .incident__body {
+            display: grid;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .incident__body strong {
+            font: 600 .86rem var(--display);
+            color: var(--ink);
+            letter-spacing: -.005em;
+        }
+
+        .incident__body p {
+            font-size: .78rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .incident__time {
+            font-size: .64rem;
+            color: var(--olive);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+           SERVICE GRID
+           ============================================================ */
+        .services {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .service {
+            display: grid;
+            gap: 8px;
+            padding: 16px;
+            background: var(--ivory);
+            border: 1px solid var(--line);
+        }
+
+        .service__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .service__top strong {
+            font: 600 .84rem var(--display);
+            color: var(--ink);
+        }
+
+        .service__state {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: .58rem;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            font-weight: 700;
+            color: var(--olive);
+        }
+
+        .service__state i {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            display: block;
+        }
+
+        .service__state--warn i {
+            background: var(--amber);
+        }
+
+        .service__state--down i {
+            background: var(--red);
+        }
+
+        .service__bar {
+            position: relative;
+            height: 4px;
+            background: rgba(45, 0, 0, .07);
+            overflow: hidden;
+        }
+
+        .service__bar span {
+            position: absolute;
+            inset: 0 auto 0 0;
+            background: var(--red);
+            display: block;
+            width: 0;
+            transition: width 1s var(--ease);
+        }
+
+        .service__meta {
+            font-size: .68rem;
+            color: var(--muted);
+        }
+
+        /* ============================================================
+           BARS
+           ============================================================ */
+        .bars-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .bar {
+            display: grid;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .bar__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 16px;
+            font-size: .8rem;
+            color: var(--ink);
+        }
+
+        .bar__value {
+            font: 700 .78rem var(--display);
+            color: var(--red);
+            white-space: nowrap;
+        }
+
+        .bar__track {
+            position: relative;
+            height: 6px;
+            background: var(--line-soft);
+            overflow: hidden;
+        }
+
+        .bar__track span {
+            position: absolute;
+            inset: 0 auto 0 0;
+            background: var(--red);
+            display: block;
+            width: 0;
+            transition: width 1s var(--ease);
+        }
+
+        /* ============================================================
+           DONUT
+           ============================================================ */
+        .donut-wrap {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 26px;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .donut {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            flex-shrink: 0;
+        }
+
+        .donut svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .donut__center {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-content: center;
+            text-align: center;
+            gap: 2px;
+        }
+
+        .donut__center strong {
+            font: 700 1.5rem var(--display);
+            letter-spacing: -.04em;
+            color: var(--ink);
+        }
+
+        .donut__center span {
+            font-size: .58rem;
+            text-transform: uppercase;
+            letter-spacing: .16em;
+            color: var(--olive);
+            font-weight: 700;
+        }
+
+        .donut__legend {
+            display: grid;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .donut__legend-row {
+            display: grid;
+            grid-template-columns: 10px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            font-size: .8rem;
+            color: var(--ink);
+        }
+
+        .donut__legend-row i {
+            width: 10px;
+            height: 10px;
+            display: block;
+            flex-shrink: 0;
+        }
+
+        .donut__legend-row b {
+            font: 600 .8rem var(--display);
+            color: var(--olive);
+        }
+
+        /* ============================================================
+           HEATMAP
+           ============================================================ */
+        .heat {
+            display: grid;
+            grid-template-columns: repeat(14, minmax(0, 1fr));
+            gap: 4px;
+        }
+
+        .heat span {
+            aspect-ratio: 1;
+            background: rgba(45, 0, 0, .06);
+            transition: background .3s ease;
+            min-width: 0;
+        }
+
+        .heat span[data-v="1"] {
+            background: rgba(109, 8, 8, .18);
+        }
+
+        .heat span[data-v="2"] {
+            background: rgba(109, 8, 8, .38);
+        }
+
+        .heat span[data-v="3"] {
+            background: rgba(109, 8, 8, .62);
+        }
+
+        .heat span[data-v="4"] {
+            background: rgba(109, 8, 8, .9);
+        }
+
+        .heat-legend {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: .66rem;
+            color: var(--olive);
+            margin-top: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .heat-legend span {
+            width: 10px;
+            height: 10px;
+            display: block;
+        }
+
+        /* ============================================================
+           RADIALS
+           ============================================================ */
+        .radials {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            text-align: center;
+        }
+
+        .radial {
+            display: grid;
+            gap: 8px;
+            place-items: center;
+            min-width: 0;
+        }
+
+        .radial__svg {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            max-width: 100%;
+        }
+
+        .radial__svg svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .radial__center {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-content: center;
+            font: 700 1.1rem var(--display);
+            letter-spacing: -.03em;
+            color: var(--ink);
+        }
+
+        .radial strong {
+            font: 600 .82rem var(--display);
+            color: var(--ink);
+        }
+
+        .radial span {
+            font-size: .66rem;
+            color: var(--muted);
+        }
+
+        /* ============================================================
+           AUDIT LOG
+           ============================================================ */
+        .audit {
+            display: grid;
+            gap: 0;
+        }
+
+        .audit__row {
+            display: grid;
+            grid-template-columns: 16px 1fr auto;
+            gap: 14px;
+            align-items: start;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .audit__row:last-child {
+            border-bottom: 0;
+        }
+
+        .audit__dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 7px;
+            border: 1px solid var(--olive);
+            background: transparent;
+            flex-shrink: 0;
+        }
+
+        .audit__dot--red {
+            background: var(--red);
+            border-color: var(--red);
+        }
+
+        .audit__body {
+            display: grid;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .audit__body p {
+            font-size: .82rem;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        .audit__body strong {
+            font-weight: 600;
+        }
+
+        .audit__body em {
+            font-style: normal;
+            color: var(--red);
+            font-weight: 500;
+        }
+
+        .audit__time {
+            font-size: .64rem;
+            color: var(--olive);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+           PERMISSION MATRIX
+           ============================================================ */
+        .perm {
+            display: grid;
+            gap: 0;
+            overflow-x: auto;
+        }
+
+        .perm__row {
+            display: grid;
+            grid-template-columns: 1.6fr repeat(4, minmax(64px, 1fr));
+            gap: 12px;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line-soft);
+            min-width: 480px;
+        }
+
+        .perm__row:last-child {
+            border-bottom: 0;
+        }
+
+        .perm__row--head {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 10px;
+        }
+
+        .perm__row--head span {
+            font-size: .56rem;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            color: var(--olive);
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .perm__row--head span:first-child {
+            text-align: left;
+        }
+
+        .perm__label {
+            font-size: .82rem;
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        .perm__cell {
+            display: grid;
+            place-items: center;
+        }
+
+        .perm__mark {
+            width: 16px;
+            height: 16px;
+            position: relative;
+        }
+
+        .perm__mark--yes::before,
+        .perm__mark--yes::after {
+            content: '';
+            position: absolute;
+            background: var(--red);
+        }
+
+        .perm__mark--yes::before {
+            left: 3px;
+            top: 7px;
+            width: 6px;
+            height: 2px;
+            transform: rotate(45deg);
+        }
+
+        .perm__mark--yes::after {
+            left: 6px;
+            top: 5px;
+            width: 9px;
+            height: 2px;
+            transform: rotate(-45deg);
+        }
+
+        .perm__mark--no::before,
+        .perm__mark--no::after {
+            content: '';
+            position: absolute;
+            top: 7px;
+            left: 2px;
+            width: 12px;
+            height: 1.5px;
+            background: rgba(45, 0, 0, .28);
+        }
+
+        .perm__mark--no::before {
+            transform: rotate(45deg);
+        }
+
+        .perm__mark--no::after {
+            transform: rotate(-45deg);
+        }
+
+        /* ============================================================
+           FOOT
+           ============================================================ */
+        .dash-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line);
+            font-size: .7rem;
+            color: var(--olive);
+        }
+
+        .dash-foot a {
+            color: var(--ink);
+            border-bottom: 1px solid var(--red);
+            padding-bottom: 2px;
+            transition: color .25s ease;
+        }
+
+        .dash-foot a:hover {
+            color: var(--red);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1180px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .grid-2,
+            .grid-2--even {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .grid-3 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .grid-3> :last-child {
+                grid-column: 1 / -1;
+            }
+
+            .services {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 960px) {
+            .app__main {
+                margin-left: 0;
+            }
+
+            .side {
+                width: min(300px, 82vw);
+                transform: translateX(-100%);
+                transition: transform .4s var(--ease);
+            }
+
+            .side.is-open {
+                transform: translateX(0);
+            }
+
+            /* >>> ADD THIS BLOCK <<< */
+            .topbar__menu {
+                display: flex;
+            }
+
+            .topbar {
+                left: 0;
+                padding: 0 20px;
+                height: 68px;
+            }
+
+            .main {
+                padding: calc(68px + 20px) 20px 32px;
+                gap: 18px;
+            }
+
+            .panel__head {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .panel__actions {
+                align-self: start;
+            }
+
+            .utable__head,
+            .utable__row {
+                grid-template-columns: 1.6fr 1fr .8fr;
+            }
+
+            .utable__head span:nth-child(3),
+            .utable__row>.utable__status {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 0 14px;
+                height: 64px;
+                gap: 10px;
+            }
+
+            .main {
+                padding: calc(64px + 16px) 14px 28px;
+            }
+
+            .topbar__search {
+                display: none;
+            }
+
+            .topbar__hello small {
+                font-size: .56rem;
+            }
+
+            .topbar__hello strong {
+                font-size: .88rem;
+                max-width: 140px;
+            }
+
+            .topbar__profile {
+                padding: 4px;
+                border: 0;
+                background: transparent;
+            }
+
+            .topbar__profile-email {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 10px;
+            }
+
+            .stat {
+                padding: 18px 18px 16px;
+            }
+
+            .stat__value {
+                font-size: 2rem;
+            }
+
+            .stat__spark {
+                width: 44px;
+                height: 22px;
+            }
+
+            .grid-3 {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .grid-3> :last-child {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 20px 18px 18px;
+            }
+
+            .card__head {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .panel__actions {
+                display: grid;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .panel__actions .btn {
+                width: 100%;
+            }
+
+            .radials {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .donut-wrap {
+                grid-template-columns: minmax(0, 1fr);
+                justify-items: center;
+                gap: 20px;
+            }
+
+            .donut__legend {
+                width: 100%;
+            }
+
+            .utable__head {
+                display: none;
+            }
+
+            .utable__row {
+                grid-template-columns: 1fr auto;
+                gap: 10px;
+            }
+
+            .utable__role {
+                display: none;
+            }
+
+            .dash-foot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .side,
+            .overlay,
+            .side__link,
+            .side__link::before,
+            .side__logout,
+            .topbar__bell,
+            .topbar__profile,
+            .btn,
+            .btn::after,
+            .card__link,
+            .dash-foot a,
+            .topbar__search input,
+            .bar__track span,
+            .service__bar span {
+                transition: none;
+            }
+
+            .btn:hover,
+            .side__logout:hover,
+            .topbar__profile:hover {
+                transform: none;
+            }
+
+            .side {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+         SIDEBAR
+         ============================================================ -->
+    <aside class="side" id="side" aria-label="Administration navigation">
+        <div class="side__brand">
+            <a class="side__logo" href="admin.html" id="sideLogo" aria-label="Stackly administration">
+                <img src="../logo.webp" alt="Stackly">
+            </a>
+            <span class="side__chip" aria-label="Account type">Admin</span>
+        </div>
+
+        <nav class="side__nav" aria-label="Administration sections">
+            <button class="side__link is-active" type="button" data-target="command" aria-current="page">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <rect x="3" y="3" width="6" height="6" />
+                    <rect x="11" y="3" width="6" height="6" />
+                    <rect x="3" y="11" width="6" height="6" />
+                    <rect x="11" y="11" width="6" height="6" />
+                </svg>
+                <span>Command</span>
+            </button>
+            <button class="side__link" type="button" data-target="users">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <circle cx="8" cy="7" r="3" />
+                    <path d="M2 17c0-3 2.7-5 6-5s6 2 6 5" />
+                    <circle cx="15" cy="6" r="2" />
+                    <path d="M14 12c2 0 4 1.3 4 3.5" />
+                </svg>
+                <span>Users</span>
+            </button>
+            <button class="side__link" type="button" data-target="system">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <rect x="3" y="3" width="14" height="5" />
+                    <rect x="3" y="12" width="14" height="5" />
+                    <circle cx="6" cy="5.5" r=".8" fill="currentColor" stroke="none" />
+                    <circle cx="6" cy="14.5" r=".8" fill="currentColor" stroke="none" />
+                </svg>
+                <span>System</span>
+            </button>
+            <button class="side__link" type="button" data-target="analytics">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <path d="M3 15V5M7 15v-6M11 15V3M15 15v-9M3 15h14" />
+                </svg>
+                <span>Analytics</span>
+            </button>
+            <button class="side__link" type="button" data-target="security">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <path d="M10 2.5 4 5v5c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V5z" />
+                    <path d="m7.5 10 2 2 3-3.5" />
+                </svg>
+                <span>Security</span>
+            </button>
+        </nav>
+
+        <div class="side__foot">
+            <div class="side__user" aria-label="Signed-in account">
+                <div class="side__user-row">
+                    <span class="side__avatar" id="sideAvatar" aria-hidden="true">GA</span>
+                    <div class="side__user-info">
+                        <strong id="sideName">Admin</strong>
+                        <span id="sideEmail">admin@stackly.com</span>
+                    </div>
+                </div>
+                <span class="side__role">Platform administrator</span>
+            </div>
+
+            <a class="side__logout" href="login.html" id="logoutBtn">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <path d="M12 3H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h7" />
+                    <path d="m14 7 3 3-3 3M17 10H8" />
+                </svg>
+                <span>Sign out</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="overlay" id="overlay" aria-hidden="true"></div>
+
+    <div class="app__main">
+
+        <!-- ============================================================
+             FIXED TOPBAR
+             ============================================================ -->
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="topbar__menu" id="menuToggle" type="button" aria-expanded="false" aria-controls="side"
+                    aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="topbar__hello">
+                    <small id="helloDate">Monday · 14 October</small>
+                    <strong id="helloName" class="display">Hello, <em>Admin</em>.</strong>
+                </div>
+            </div>
+
+            <div class="topbar__right">
+                <div class="topbar__search">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                        <circle cx="8.5" cy="8.5" r="5.5" />
+                        <line x1="12.6" y1="12.6" x2="17" y2="17" stroke-linecap="round" />
+                    </svg>
+                    <input type="search" placeholder="Search platform" aria-label="Search platform">
+                </div>
+
+                <button class="topbar__bell" type="button" aria-label="Notifications">
+                    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path d="M11 3.2a4.8 4.8 0 0 0-4.8 4.8v3.4L4.6 14.4h12.8l-1.6-3V8A4.8 4.8 0 0 0 11 3.2Z"
+                            stroke-linejoin="round" />
+                        <path d="M9 16.6a2.1 2.1 0 0 0 4 0" stroke-linecap="round" />
+                    </svg>
+                    <span class="topbar__bell-dot" aria-hidden="true"></span>
+                </button>
+
+                <a class="topbar__profile" href="../404.html" aria-label="Profile">
+                    <span class="topbar__profile-avatar" id="topAvatar" aria-hidden="true">GA</span>
+                    <span class="topbar__profile-email" id="topEmail">admin@stackly.com</span>
+                </a>
+            </div>
+        </header>
+
+        <main class="main">
+
+            <!-- ============================================================
+                 PANEL: COMMAND
+                 ============================================================ -->
+            <section class="panel is-active" id="command" aria-label="Command centre">
+                <div class="panel__head">
+                    <div>
+                        <span class="eyebrow">Command</span>
+                        <h1 class="display">Platform overview and control.</h1>
+                        <p>Live state of the platform, key metrics, and the alerts that matter right now.</p>
+                    </div>
+                    <div class="panel__actions">
+                        <a class="btn btn--solid" href="../404.html">Run diagnostics</a>
+                        <a class="btn btn--ghost" href="../404.html">Open console</a>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <article class="stat">
+                        <span class="stat__label">Total users</span>
+                        <strong class="stat__value">4,218</strong>
+                        <span class="stat__note">+126 this month</span>
+                        <svg class="stat__spark" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                            <polyline points="0,20 10,16 20,18 30,10 42,12 52,4" stroke="#6D0808" stroke-width="1.6" />
+                        </svg>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Active sessions</span>
+                        <strong class="stat__value">1,092</strong>
+                        <span class="stat__note">Right now</span>
+                        <svg class="stat__spark" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                            <polyline points="0,18 10,20 20,12 30,14 42,8 52,10" stroke="#757D6F" stroke-width="1.6" />
+                        </svg>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">System load</span>
+                        <strong class="stat__value">38<span class="stat__value-sub">%</span></strong>
+                        <span class="stat__note">Across 24 nodes</span>
+                        <svg class="stat__spark" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                            <polyline points="0,14 10,10 20,12 30,8 42,10 52,6" stroke="#6D0808" stroke-width="1.6" />
+                        </svg>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Open alerts</span>
+                        <strong class="stat__value">3</strong>
+                        <span class="stat__note">1 critical, 2 warnings</span>
+                        <svg class="stat__spark" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                            <polyline points="0,20 10,22 20,18 30,20 42,14 52,16" stroke="#757D6F" stroke-width="1.6" />
+                        </svg>
+                    </article>
+                </div>
+
+                <div class="grid-2">
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Platform activity</h2>
+                                <p class="card__sub">Requests served across the last 14 days</p>
+                            </div>
+                            <span class="card__chip">14 days</span>
+                        </header>
+
+                        <div class="chart chart--standard" role="img"
+                            aria-label="Platform request volume across the last 14 days">
+                            <svg viewBox="0 0 800 220" preserveAspectRatio="xMidYMid meet">
+                                <defs>
+                                    <linearGradient id="adminAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#6D0808" stop-opacity=".24" />
+                                        <stop offset="100%" stop-color="#6D0808" stop-opacity="0" />
+                                    </linearGradient>
+                                </defs>
+
+                                <g stroke="rgba(45, 0, 0, .07)" stroke-width="1" stroke-dasharray="2 4">
+                                    <line x1="20" y1="20" x2="780" y2="20" />
+                                    <line x1="20" y1="60" x2="780" y2="60" />
+                                    <line x1="20" y1="100" x2="780" y2="100" />
+                                    <line x1="20" y1="140" x2="780" y2="140" />
+                                </g>
+
+                                <line x1="20" y1="180" x2="780" y2="180" stroke="rgba(45, 0, 0, .18)" />
+
+                                <path class="chart__area"
+                                    d="M 20,140 L 78,120 L 137,100 L 195,90 L 254,70 L 312,80 L 371,60 L 429,50 L 487,70 L 546,40 L 604,50 L 663,30 L 721,60 L 780,20 L 780,180 L 20,180 Z"
+                                    fill="url(#adminAreaGrad)" />
+
+                                <path class="chart__line"
+                                    d="M 20,140 L 78,120 L 137,100 L 195,90 L 254,70 L 312,80 L 371,60 L 429,50 L 487,70 L 546,40 L 604,50 L 663,30 L 721,60 L 780,20"
+                                    fill="none" stroke="#6D0808" stroke-width="2.4" stroke-linejoin="round"
+                                    stroke-linecap="round" />
+
+                                <g fill="#6D0808">
+                                    <circle cx="254" cy="70" r="3" />
+                                    <circle cx="546" cy="40" r="3" />
+                                    <circle cx="780" cy="20" r="4" />
+                                </g>
+
+                                <g fill="rgba(117, 125, 111, .9)" font-size="10" font-family="DM Sans, sans-serif">
+                                    <text x="20" y="205">Day 1</text>
+                                    <text x="195" y="205" text-anchor="middle">Day 4</text>
+                                    <text x="429" y="205" text-anchor="middle">Day 8</text>
+                                    <text x="663" y="205" text-anchor="middle">Day 12</text>
+                                    <text x="780" y="205" text-anchor="end">Today</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <footer class="card__foot">
+                            <span class="legend">
+                                <span class="legend__dot" aria-hidden="true"></span>
+                                Requests served
+                            </span>
+                            <span class="card__note">Live</span>
+                        </footer>
+                    </article>
+
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Critical alerts</h2>
+                                <p class="card__sub">Needs attention now</p>
+                            </div>
+                            <a class="card__link" href="../404.html">All alerts</a>
+                        </header>
+
+                        <div>
+                            <div class="incident incident--critical">
+                                <span class="incident__dot" aria-hidden="true"></span>
+                                <div class="incident__body">
+                                    <strong>Elevated response time</strong>
+                                    <p>API gateway p95 latency above threshold on 2 regions.</p>
+                                </div>
+                                <span class="incident__time">12m</span>
+                            </div>
+                            <div class="incident incident--warning">
+                                <span class="incident__dot" aria-hidden="true"></span>
+                                <div class="incident__body">
+                                    <strong>Queue depth rising</strong>
+                                    <p>Background job queue growing faster than workers can drain.</p>
+                                </div>
+                                <span class="incident__time">48m</span>
+                            </div>
+                            <div class="incident incident--warning">
+                                <span class="incident__dot" aria-hidden="true"></span>
+                                <div class="incident__body">
+                                    <strong>Storage nearing threshold</strong>
+                                    <p>Object storage in eu-west at 82% capacity.</p>
+                                </div>
+                                <span class="incident__time">3h</span>
+                            </div>
+                            <div class="incident incident--resolved">
+                                <span class="incident__dot" aria-hidden="true"></span>
+                                <div class="incident__body">
+                                    <strong>Auth service recovered</strong>
+                                    <p>Brief timeout spike resolved after node rotation.</p>
+                                </div>
+                                <span class="incident__time">6h</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="grid-2 grid-2--even">
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Account mix</h2>
+                                <p class="card__sub">Across the entire platform</p>
+                            </div>
+                            <span class="card__chip">This month</span>
+                        </header>
+
+                        <div class="donut-wrap">
+                            <div class="donut" aria-hidden="true">
+                                <svg viewBox="0 0 36 36">
+                                    <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(45,0,0,.08)"
+                                        stroke-width="3" />
+                                    <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#6D0808" stroke-width="3"
+                                        stroke-dasharray="58 100" stroke-dashoffset="0" />
+                                    <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#757D6F" stroke-width="3"
+                                        stroke-dasharray="24 100" stroke-dashoffset="-58" />
+                                    <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#2D0000" stroke-width="3"
+                                        stroke-dasharray="12 100" stroke-dashoffset="-82" />
+                                    <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(45,0,0,.18)"
+                                        stroke-width="3" stroke-dasharray="6 100" stroke-dashoffset="-94" />
+                                </svg>
+                                <div class="donut__center">
+                                    <strong>4.2k</strong>
+                                    <span>Accounts</span>
+                                </div>
+                            </div>
+
+                            <div class="donut__legend">
+                                <div class="donut__legend-row">
+                                    <i style="background:#6D0808"></i>
+                                    <span>Standard users</span>
+                                    <b>58%</b>
+                                </div>
+                                <div class="donut__legend-row">
+                                    <i style="background:#757D6F"></i>
+                                    <span>Team owners</span>
+                                    <b>24%</b>
+                                </div>
+                                <div class="donut__legend-row">
+                                    <i style="background:#2D0000"></i>
+                                    <span>Admins</span>
+                                    <b>12%</b>
+                                </div>
+                                <div class="donut__legend-row">
+                                    <i style="background:rgba(45,0,0,.18)"></i>
+                                    <span>Service accounts</span>
+                                    <b>6%</b>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Administrative activity</h2>
+                                <p class="card__sub">Recent platform-level events</p>
+                            </div>
+                            <a class="card__link" href="../404.html">Open log</a>
+                        </header>
+
+                        <ol class="audit">
+                            <li class="audit__row">
+                                <span class="audit__dot audit__dot--red" aria-hidden="true"></span>
+                                <div class="audit__body">
+                                    <p>Rate limit policy updated on <strong>API gateway</strong></p>
+                                    <span class="audit__time">18m ago</span>
+                                </div>
+                            </li>
+                            <li class="audit__row">
+                                <span class="audit__dot" aria-hidden="true"></span>
+                                <div class="audit__body">
+                                    <p><strong>Deployment</strong> completed · <em>core-service v4.12.1</em></p>
+                                    <span class="audit__time">2h ago</span>
+                                </div>
+                            </li>
+                            <li class="audit__row">
+                                <span class="audit__dot" aria-hidden="true"></span>
+                                <div class="audit__body">
+                                    <p>Backup snapshot verified for <strong>primary database</strong></p>
+                                    <span class="audit__time">5h ago</span>
+                                </div>
+                            </li>
+                            <li class="audit__row">
+                                <span class="audit__dot" aria-hidden="true"></span>
+                                <div class="audit__body">
+                                    <p>SSO configuration reviewed by <strong>M. Raman</strong></p>
+                                    <span class="audit__time">Yesterday</span>
+                                </div>
+                            </li>
+                            <li class="audit__row">
+                                <span class="audit__dot" aria-hidden="true"></span>
+                                <div class="audit__body">
+                                    <p>New service account provisioned · <em>metrics-collector</em></p>
+                                    <span class="audit__time">Yesterday</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </article>
+                </div>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Service status</h2>
+                            <p class="card__sub">Core platform services and their current state</p>
+                        </div>
+                        <span class="card__chip">Realtime</span>
+                    </header>
+
+                    <div class="services">
+                        <div class="service">
+                            <div class="service__top">
+                                <strong>API gateway</strong>
+                                <span class="service__state service__state--warn"><i></i>Degraded</span>
+                            </div>
+                            <div class="service__bar"><span data-w="72%"></span></div>
+                            <span class="service__meta">72% headroom · p95 340ms</span>
+                        </div>
+                        <div class="service">
+                            <div class="service__top">
+                                <strong>Authentication</strong>
+                                <span class="service__state"><i></i>Healthy</span>
+                            </div>
+                            <div class="service__bar"><span data-w="94%"></span></div>
+                            <span class="service__meta">94% headroom · 18ms avg</span>
+                        </div>
+                        <div class="service">
+                            <div class="service__top">
+                                <strong>Workspace engine</strong>
+                                <span class="service__state"><i></i>Healthy</span>
+                            </div>
+                            <div class="service__bar"><span data-w="88%"></span></div>
+                            <span class="service__meta">88% headroom · 42ms avg</span>
+                        </div>
+                        <div class="service">
+                            <div class="service__top">
+                                <strong>Background workers</strong>
+                                <span class="service__state service__state--warn"><i></i>Busy</span>
+                            </div>
+                            <div class="service__bar"><span data-w="56%"></span></div>
+                            <span class="service__meta">56% headroom · queue 1.2k</span>
+                        </div>
+                        <div class="service">
+                            <div class="service__top">
+                                <strong>Storage layer</strong>
+                                <span class="service__state service__state--warn"><i></i>Warning</span>
+                            </div>
+                            <div class="service__bar"><span data-w="34%"></span></div>
+                            <span class="service__meta">34% headroom · eu-west 82%</span>
+                        </div>
+                        <div class="service">
+                            <div class="service__top">
+                                <strong>Notifications</strong>
+                                <span class="service__state"><i></i>Healthy</span>
+                            </div>
+                            <div class="service__bar"><span data-w="91%"></span></div>
+                            <span class="service__meta">91% headroom · 0 backlog</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- ============================================================
+                 PANEL: USERS
+                 ============================================================ -->
+            <section class="panel" id="users" aria-label="Users">
+                <div class="panel__head">
+                    <div>
+                        <span class="eyebrow">Users</span>
+                        <h1 class="display">Accounts, roles, and access.</h1>
+                        <p>Who is on the platform, how they signed up, and what they can reach.</p>
+                    </div>
+                    <div class="panel__actions">
+                        <a class="btn btn--solid" href="../404.html">Invite user</a>
+                        <a class="btn btn--ghost" href="../404.html">Export list</a>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <article class="stat">
+                        <span class="stat__label">Total accounts</span>
+                        <strong class="stat__value">4,218</strong>
+                        <span class="stat__note">+126 this month</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Active today</span>
+                        <strong class="stat__value">1,092</strong>
+                        <span class="stat__note">26% of total</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">New this week</span>
+                        <strong class="stat__value">184</strong>
+                        <span class="stat__note">Across 3 regions</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Suspended</span>
+                        <strong class="stat__value">7</strong>
+                        <span class="stat__note">2 pending review</span>
+                    </article>
+                </div>
+
+                <div class="grid-2">
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">New registrations</h2>
+                                <p class="card__sub">Accounts created across the last 14 days</p>
+                            </div>
+                            <span class="card__chip">14 days</span>
+                        </header>
+
+                        <div class="chart chart--standard" role="img"
+                            aria-label="New user registrations across the last 14 days">
+                            <svg viewBox="0 0 800 220" preserveAspectRatio="xMidYMid meet">
+                                <g stroke="rgba(45, 0, 0, .07)" stroke-dasharray="2 4">
+                                    <line x1="20" y1="40" x2="780" y2="40" />
+                                    <line x1="20" y1="90" x2="780" y2="90" />
+                                    <line x1="20" y1="140" x2="780" y2="140" />
+                                </g>
+                                <line x1="20" y1="180" x2="780" y2="180" stroke="rgba(45, 0, 0, .18)" />
+
+                                <g fill="#6D0808">
+                                    <rect x="34" y="130" width="30" height="50" />
+                                    <rect x="88" y="110" width="30" height="70" />
+                                    <rect x="142" y="90" width="30" height="90" />
+                                    <rect x="196" y="120" width="30" height="60" />
+                                    <rect x="250" y="70" width="30" height="110" />
+                                    <rect x="304" y="60" width="30" height="120" />
+                                    <rect x="358" y="100" width="30" height="80" />
+                                    <rect x="412" y="80" width="30" height="100" />
+                                    <rect x="466" y="50" width="30" height="130" />
+                                    <rect x="520" y="40" width="30" height="140" />
+                                    <rect x="574" y="90" width="30" height="90" />
+                                    <rect x="628" y="60" width="30" height="120" />
+                                    <rect x="682" y="30" width="30" height="150" />
+                                    <rect x="736" y="20" width="30" height="160" />
+                                </g>
+
+                                <g fill="rgba(117, 125, 111, .9)" font-size="10" font-family="DM Sans, sans-serif">
+                                    <text x="20" y="205">Day 1</text>
+                                    <text x="195" y="205" text-anchor="middle">Day 4</text>
+                                    <text x="429" y="205" text-anchor="middle">Day 8</text>
+                                    <text x="663" y="205" text-anchor="middle">Day 12</text>
+                                    <text x="780" y="205" text-anchor="end">Today</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <footer class="card__foot">
+                            <span class="legend">
+                                <span class="legend__dot" aria-hidden="true"></span>
+                                New accounts per day
+                            </span>
+                            <span class="card__note">Live</span>
+                        </footer>
+                    </article>
+
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Role distribution</h2>
+                                <p class="card__sub">Active accounts by permission level</p>
+                            </div>
+                            <span class="card__chip">Current</span>
+                        </header>
+
+                        <div class="bars-list">
+                            <div class="bar">
+                                <div class="bar__top"><span>Standard users</span><span class="bar__value">58%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="58%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>Team owners</span><span class="bar__value">24%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="24%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>Administrators</span><span class="bar__value">12%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="12%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>Service accounts</span><span class="bar__value">6%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="6%"></span></div>
+                            </div>
+                        </div>
+
+                        <footer class="card__foot">
+                            <span class="legend">
+                                <span class="legend__dot" aria-hidden="true"></span>
+                                Share of active accounts
+                            </span>
+                            <span class="card__note">Last 30 days</span>
+                        </footer>
+                    </article>
+                </div>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Recent accounts</h2>
+                            <p class="card__sub">The most recent sign-ups across the platform</p>
+                        </div>
+                        <a class="card__link" href="../404.html">View all</a>
+                    </header>
+
+                    <div class="utable">
+                        <div class="utable__head">
+                            <span>User</span>
+                            <span>Role</span>
+                            <span>Status</span>
+                            <span>Last seen</span>
+                        </div>
+
+                        <div class="utable__row">
+                            <div class="utable__user">
+                                <span class="utable__avatar" aria-hidden="true">PR</span>
+                                <div class="utable__info">
+                                    <strong>Priya Raman</strong>
+                                    <span>priya.raman@stackly.com</span>
+                                </div>
+                            </div>
+                            <span class="utable__role">Admin</span>
+                            <span class="utable__status utable__status--active"><i></i>Active</span>
+                            <span class="utable__seen">2m ago</span>
+                        </div>
+
+                        <div class="utable__row">
+                            <div class="utable__user">
+                                <span class="utable__avatar" aria-hidden="true">MR</span>
+                                <div class="utable__info">
+                                    <strong>Maya Raman</strong>
+                                    <span>maya.raman@stackly.com</span>
+                                </div>
+                            </div>
+                            <span class="utable__role">Owner</span>
+                            <span class="utable__status utable__status--active"><i></i>Active</span>
+                            <span class="utable__seen">14m ago</span>
+                        </div>
+
+                        <div class="utable__row">
+                            <div class="utable__user">
+                                <span class="utable__avatar" aria-hidden="true">AK</span>
+                                <div class="utable__info">
+                                    <strong>Arjun Kumar</strong>
+                                    <span>arjun.kumar@stackly.com</span>
+                                </div>
+                            </div>
+                            <span class="utable__role">User</span>
+                            <span class="utable__status utable__status--active"><i></i>Active</span>
+                            <span class="utable__seen">1h ago</span>
+                        </div>
+
+                        <div class="utable__row">
+                            <div class="utable__user">
+                                <span class="utable__avatar" aria-hidden="true">SN</span>
+                                <div class="utable__info">
+                                    <strong>Sana Noor</strong>
+                                    <span>sana.noor@stackly.com</span>
+                                </div>
+                            </div>
+                            <span class="utable__role">User</span>
+                            <span class="utable__status"><i></i>Away</span>
+                            <span class="utable__seen">4h ago</span>
+                        </div>
+
+                        <div class="utable__row">
+                            <div class="utable__user">
+                                <span class="utable__avatar" aria-hidden="true">RK</span>
+                                <div class="utable__info">
+                                    <strong>Rohit Krishnan</strong>
+                                    <span>rohit.k@stackly.com</span>
+                                </div>
+                            </div>
+                            <span class="utable__role">Owner</span>
+                            <span class="utable__status utable__status--suspended"><i></i>Suspended</span>
+                            <span class="utable__seen">3d ago</span>
+                        </div>
+
+                        <div class="utable__row">
+                            <div class="utable__user">
+                                <span class="utable__avatar" aria-hidden="true">JL</span>
+                                <div class="utable__info">
+                                    <strong>Jaya Lakshmi</strong>
+                                    <span>jaya.l@stackly.com</span>
+                                </div>
+                            </div>
+                            <span class="utable__role">User</span>
+                            <span class="utable__status utable__status--active"><i></i>Active</span>
+                            <span class="utable__seen">6h ago</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Engagement by cohort</h2>
+                            <p class="card__sub">Retention across signup weeks</p>
+                        </div>
+                        <span class="card__chip">12 weeks</span>
+                    </header>
+
+                    <div class="chart chart--tall" role="img"
+                        aria-label="Cohort retention across the last twelve weeks">
+                        <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+                            <g stroke="rgba(45, 0, 0, .07)" stroke-dasharray="2 4">
+                                <line x1="20" y1="40" x2="780" y2="40" />
+                                <line x1="20" y1="100" x2="780" y2="100" />
+                                <line x1="20" y1="160" x2="780" y2="160" />
+                                <line x1="20" y1="220" x2="780" y2="220" />
+                            </g>
+                            <line x1="20" y1="260" x2="780" y2="260" stroke="rgba(45, 0, 0, .18)" />
+
+                            <polyline
+                                points="20,220 78,200 137,180 195,160 254,140 312,120 371,110 429,100 487,90 546,80 604,75 663,70 721,68 780,65"
+                                fill="none" stroke="#6D0808" stroke-width="2.4" stroke-linejoin="round"
+                                stroke-linecap="round" />
+                            <polyline
+                                points="20,240 78,220 137,210 195,190 254,180 312,170 371,165 429,160 487,155 546,150 604,148 663,146 721,144 780,142"
+                                fill="none" stroke="#757D6F" stroke-width="2" stroke-linejoin="round"
+                                stroke-linecap="round" stroke-dasharray="4 4" />
+                            <polyline
+                                points="20,250 78,240 137,230 195,215 254,205 312,195 371,190 429,185 487,182 546,178 604,176 663,174 721,172 780,170"
+                                fill="none" stroke="#B98534" stroke-width="2" stroke-linejoin="round"
+                                stroke-linecap="round" stroke-dasharray="2 5" />
+
+                            <g fill="rgba(117, 125, 111, .9)" font-size="10" font-family="DM Sans, sans-serif">
+                                <text x="20" y="285">Week 1</text>
+                                <text x="195" y="285" text-anchor="middle">Week 4</text>
+                                <text x="429" y="285" text-anchor="middle">Week 8</text>
+                                <text x="663" y="285" text-anchor="middle">Week 12</text>
+                                <text x="780" y="285" text-anchor="end">Now</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <footer class="card__foot">
+                        <span class="legend"><span class="legend__dot"></span>Day 1 retention</span>
+                        <span class="legend"><span class="legend__dot legend__dot--olive"></span>Day 7 retention</span>
+                        <span class="legend"><span class="legend__dot legend__dot--amber"></span>Day 30 retention</span>
+                    </footer>
+                </article>
+            </section>
+
+            <!-- ============================================================
+                 PANEL: SYSTEM
+                 ============================================================ -->
+            <section class="panel" id="system" aria-label="System">
+                <div class="panel__head">
+                    <div>
+                        <span class="eyebrow">System</span>
+                        <h1 class="display">Infrastructure and services.</h1>
+                        <p>What is running, what is under pressure, and what changed in the last few hours.</p>
+                    </div>
+                    <div class="panel__actions">
+                        <a class="btn btn--solid" href="../404.html">Deploy</a>
+                        <a class="btn btn--ghost" href="../404.html">Open runbook</a>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <article class="stat">
+                        <span class="stat__label">Uptime</span>
+                        <strong class="stat__value">99.98<span class="stat__value-sub">%</span></strong>
+                        <span class="stat__note">Rolling 30 days</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Avg response</span>
+                        <strong class="stat__value">72<span class="stat__value-sub">ms</span></strong>
+                        <span class="stat__note">Across all regions</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Error rate</span>
+                        <strong class="stat__value">0.14<span class="stat__value-sub">%</span></strong>
+                        <span class="stat__note">5xx responses</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Nodes online</span>
+                        <strong class="stat__value">24<span class="stat__value-sub">/24</span></strong>
+                        <span class="stat__note">3 regions</span>
+                    </article>
+                </div>
+
+                <div class="grid-2">
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Performance trend</h2>
+                                <p class="card__sub">Response time and error rate across 14 days</p>
+                            </div>
+                            <span class="card__chip">14 days</span>
+                        </header>
+
+                        <div class="chart chart--standard" role="img" aria-label="Response time and error rate trend">
+                            <svg viewBox="0 0 800 220" preserveAspectRatio="xMidYMid meet">
+                                <g stroke="rgba(45, 0, 0, .07)" stroke-dasharray="2 4">
+                                    <line x1="20" y1="40" x2="780" y2="40" />
+                                    <line x1="20" y1="90" x2="780" y2="90" />
+                                    <line x1="20" y1="140" x2="780" y2="140" />
+                                </g>
+                                <line x1="20" y1="180" x2="780" y2="180" stroke="rgba(45, 0, 0, .18)" />
+
+                                <polyline
+                                    points="20,100 78,90 137,80 195,95 254,70 312,60 371,75 429,55 487,50 546,65 604,45 663,40 721,55 780,35"
+                                    fill="none" stroke="#6D0808" stroke-width="2.4" stroke-linejoin="round"
+                                    stroke-linecap="round" />
+                                <polyline
+                                    points="20,150 78,140 137,145 195,135 254,125 312,130 371,120 429,115 487,125 546,110 604,105 663,115 721,100 780,95"
+                                    fill="none" stroke="#757D6F" stroke-width="2" stroke-linejoin="round"
+                                    stroke-linecap="round" stroke-dasharray="4 4" />
+
+                                <g fill="#6D0808">
+                                    <circle cx="312" cy="60" r="3" />
+                                    <circle cx="604" cy="45" r="3" />
+                                    <circle cx="780" cy="35" r="4" />
+                                </g>
+
+                                <g fill="rgba(117, 125, 111, .9)" font-size="10" font-family="DM Sans, sans-serif">
+                                    <text x="20" y="205">Day 1</text>
+                                    <text x="195" y="205" text-anchor="middle">Day 4</text>
+                                    <text x="429" y="205" text-anchor="middle">Day 8</text>
+                                    <text x="663" y="205" text-anchor="middle">Day 12</text>
+                                    <text x="780" y="205" text-anchor="end">Today</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <footer class="card__foot">
+                            <span class="legend"><span class="legend__dot"></span>p95 response</span>
+                            <span class="legend"><span class="legend__dot legend__dot--olive"></span>Error rate</span>
+                        </footer>
+                    </article>
+
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Node health</h2>
+                                <p class="card__sub">Utilisation across the three regions</p>
+                            </div>
+                            <span class="card__chip">Realtime</span>
+                        </header>
+
+                        <div class="bars-list">
+                            <div class="bar">
+                                <div class="bar__top"><span>us-east · 8 nodes</span><span class="bar__value">42%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="42%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>eu-west · 8 nodes</span><span class="bar__value">58%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="58%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>ap-south · 8 nodes</span><span class="bar__value">31%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="31%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>Background workers</span><span class="bar__value">64%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="64%"></span></div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Incidents</h2>
+                            <p class="card__sub">The last 24 hours of system events</p>
+                        </div>
+                        <a class="card__link" href="../404.html">Open incident log</a>
+                    </header>
+
+                    <div>
+                        <div class="incident incident--critical">
+                            <span class="incident__dot" aria-hidden="true"></span>
+                            <div class="incident__body">
+                                <strong>Elevated response time on API gateway</strong>
+                                <p>p95 latency above 300ms in two regions. Traffic shaping applied at 11:20.</p>
+                            </div>
+                            <span class="incident__time">18m ago</span>
+                        </div>
+                        <div class="incident incident--warning">
+                            <span class="incident__dot" aria-hidden="true"></span>
+                            <div class="incident__body">
+                                <strong>Background queue depth rising</strong>
+                                <p>Queue crossed 1k items. Additional workers scaled out at 10:45.</p>
+                            </div>
+                            <span class="incident__time">1h ago</span>
+                        </div>
+                        <div class="incident incident--warning">
+                            <span class="incident__dot" aria-hidden="true"></span>
+                            <div class="incident__body">
+                                <strong>Storage approaching threshold in eu-west</strong>
+                                <p>Bucket usage at 82%. Archive job scheduled for 02:00.</p>
+                            </div>
+                            <span class="incident__time">3h ago</span>
+                        </div>
+                        <div class="incident incident--resolved">
+                            <span class="incident__dot" aria-hidden="true"></span>
+                            <div class="incident__body">
+                                <strong>Auth service timeout spike resolved</strong>
+                                <p>Spike lasted 4 minutes. Root cause traced to a stale connection pool.</p>
+                            </div>
+                            <span class="incident__time">6h ago</span>
+                        </div>
+                        <div class="incident incident--resolved">
+                            <span class="incident__dot" aria-hidden="true"></span>
+                            <div class="incident__body">
+                                <strong>Deployment completed</strong>
+                                <p>core-service v4.12.1 rolled out to all regions with zero downtime.</p>
+                            </div>
+                            <span class="incident__time">9h ago</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Resource usage</h2>
+                            <p class="card__sub">Compute, memory, and network across the platform</p>
+                        </div>
+                        <span class="card__chip">Live</span>
+                    </header>
+
+                    <div class="radials">
+                        <div class="radial">
+                            <div class="radial__svg">
+                                <svg viewBox="0 0 36 36">
+                                    <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(45,0,0,.1)"
+                                        stroke-width="2.5" />
+                                    <circle class="radial__arc" cx="18" cy="18" r="15.9155" fill="none" stroke="#6D0808"
+                                        stroke-width="2.5" stroke-dasharray="38 100" />
+                                </svg>
+                                <div class="radial__center">38%</div>
+                            </div>
+                            <strong>Compute</strong>
+                            <span>Across 24 nodes</span>
+                        </div>
+                        <div class="radial">
+                            <div class="radial__svg">
+                                <svg viewBox="0 0 36 36">
+                                    <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(45,0,0,.1)"
+                                        stroke-width="2.5" />
+                                    <circle class="radial__arc" cx="18" cy="18" r="15.9155" fill="none" stroke="#6D0808"
+                                        stroke-width="2.5" stroke-dasharray="62 100" />
+                                </svg>
+                                <div class="radial__center">62%</div>
+                            </div>
+                            <strong>Memory</strong>
+                            <span>Peak across regions</span>
+                        </div>
+                        <div class="radial">
+                            <div class="radial__svg">
+                                <svg viewBox="0 0 36 36">
+                                    <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(45,0,0,.1)"
+                                        stroke-width="2.5" />
+                                    <circle class="radial__arc" cx="18" cy="18" r="15.9155" fill="none" stroke="#6D0808"
+                                        stroke-width="2.5" stroke-dasharray="48 100" />
+                                </svg>
+                                <div class="radial__center">48%</div>
+                            </div>
+                            <strong>Network</strong>
+                            <span>Bandwidth used</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- ============================================================
+                 PANEL: ANALYTICS
+                 ============================================================ -->
+            <section class="panel" id="analytics" aria-label="Analytics">
+                <div class="panel__head">
+                    <div>
+                        <span class="eyebrow">Analytics</span>
+                        <h1 class="display">How the platform is being used.</h1>
+                        <p>Adoption, engagement, and the features that carry the most weight.</p>
+                    </div>
+                    <div class="panel__actions">
+                        <a class="btn btn--ghost" href="../404.html">Change range</a>
+                        <a class="btn btn--solid" href="../404.html">Export report</a>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <article class="stat">
+                        <span class="stat__label">Daily active users</span>
+                        <strong class="stat__value">1,092</strong>
+                        <span class="stat__note">Peak today at 10:30</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Sessions</span>
+                        <strong class="stat__value">8,414</strong>
+                        <span class="stat__note">Last 24 hours</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Feature adoption</span>
+                        <strong class="stat__value">74<span class="stat__value-sub">%</span></strong>
+                        <span class="stat__note">Of active accounts</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Avg. session</span>
+                        <strong class="stat__value">24<span class="stat__value-sub">m</span></strong>
+                        <span class="stat__note">Up from 21m last month</span>
+                    </article>
+                </div>
+
+                <div class="grid-2">
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Feature usage</h2>
+                                <p class="card__sub">Percentage of active users who used each feature</p>
+                            </div>
+                            <span class="card__chip">Last 30 days</span>
+                        </header>
+
+                        <div class="bars-list">
+                            <div class="bar">
+                                <div class="bar__top"><span>Workspaces</span><span class="bar__value">89%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="89%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>Tasks &amp; workflows</span><span
+                                        class="bar__value">76%</span></div>
+                                <div class="bar__track"><span data-w="76%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>Automations</span><span class="bar__value">54%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="54%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>Reports &amp; insights</span><span
+                                        class="bar__value">43%</span></div>
+                                <div class="bar__track"><span data-w="43%"></span></div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar__top"><span>Integrations</span><span class="bar__value">31%</span>
+                                </div>
+                                <div class="bar__track"><span data-w="31%"></span></div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Engagement signals</h2>
+                                <p class="card__sub">How usage is trending</p>
+                            </div>
+                            <span class="card__chip">Live</span>
+                        </header>
+
+                        <div class="radials">
+                            <div class="radial">
+                                <div class="radial__svg">
+                                    <svg viewBox="0 0 36 36">
+                                        <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(45,0,0,.1)"
+                                            stroke-width="2.5" />
+                                        <circle class="radial__arc" cx="18" cy="18" r="15.9155" fill="none"
+                                            stroke="#6D0808" stroke-width="2.5" stroke-dasharray="82 100" />
+                                    </svg>
+                                    <div class="radial__center">82%</div>
+                                </div>
+                                <strong>Day 1</strong>
+                                <span>Session retention</span>
+                            </div>
+                            <div class="radial">
+                                <div class="radial__svg">
+                                    <svg viewBox="0 0 36 36">
+                                        <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(45,0,0,.1)"
+                                            stroke-width="2.5" />
+                                        <circle class="radial__arc" cx="18" cy="18" r="15.9155" fill="none"
+                                            stroke="#6D0808" stroke-width="2.5" stroke-dasharray="58 100" />
+                                    </svg>
+                                    <div class="radial__center">58%</div>
+                                </div>
+                                <strong>Day 7</strong>
+                                <span>Weekly return</span>
+                            </div>
+                            <div class="radial">
+                                <div class="radial__svg">
+                                    <svg viewBox="0 0 36 36">
+                                        <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(45,0,0,.1)"
+                                            stroke-width="2.5" />
+                                        <circle class="radial__arc" cx="18" cy="18" r="15.9155" fill="none"
+                                            stroke="#6D0808" stroke-width="2.5" stroke-dasharray="34 100" />
+                                    </svg>
+                                    <div class="radial__center">34%</div>
+                                </div>
+                                <strong>Day 30</strong>
+                                <span>Monthly retention</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Platform load</h2>
+                            <p class="card__sub">Requests per hour across the last 14 days</p>
+                        </div>
+                        <span class="card__chip">14 days</span>
+                    </header>
+
+                    <div class="chart chart--tall" role="img" aria-label="Platform load across the last 14 days">
+                        <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+                            <g stroke="rgba(45, 0, 0, .07)" stroke-dasharray="2 4">
+                                <line x1="20" y1="40" x2="780" y2="40" />
+                                <line x1="20" y1="100" x2="780" y2="100" />
+                                <line x1="20" y1="160" x2="780" y2="160" />
+                                <line x1="20" y1="220" x2="780" y2="220" />
+                            </g>
+                            <line x1="20" y1="260" x2="780" y2="260" stroke="rgba(45, 0, 0, .18)" />
+
+                            <polyline
+                                points="20,220 78,180 137,190 195,150 254,130 312,140 371,120 429,100 487,80 546,100 604,70 663,50 721,60 780,30"
+                                fill="none" stroke="#6D0808" stroke-width="2.4" stroke-linejoin="round"
+                                stroke-linecap="round" />
+                            <polyline
+                                points="20,240 78,220 137,225 195,200 254,180 312,190 371,180 429,160 487,150 546,160 604,140 663,120 721,130 780,110"
+                                fill="none" stroke="#757D6F" stroke-width="2" stroke-linejoin="round"
+                                stroke-linecap="round" stroke-dasharray="4 4" />
+
+                            <g fill="rgba(117, 125, 111, .9)" font-size="10" font-family="DM Sans, sans-serif">
+                                <text x="20" y="285">Day 1</text>
+                                <text x="195" y="285" text-anchor="middle">Day 4</text>
+                                <text x="429" y="285" text-anchor="middle">Day 8</text>
+                                <text x="663" y="285" text-anchor="middle">Day 12</text>
+                                <text x="780" y="285" text-anchor="end">Today</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <footer class="card__foot">
+                        <span class="legend"><span class="legend__dot"></span>Requests served</span>
+                        <span class="legend"><span class="legend__dot legend__dot--olive"></span>Unique users</span>
+                    </footer>
+                </article>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Usage heatmap</h2>
+                            <p class="card__sub">Activity intensity per day over the last two weeks</p>
+                        </div>
+                        <span class="card__chip">14 days</span>
+                    </header>
+
+                    <div class="heat" aria-hidden="true">
+                        <span data-v="2"></span><span data-v="3"></span><span data-v="1"></span><span data-v="4"></span>
+                        <span data-v="4"></span><span data-v="2"></span><span data-v="1"></span><span data-v="3"></span>
+                        <span data-v="4"></span><span data-v="4"></span><span data-v="3"></span><span data-v="2"></span>
+                        <span data-v="4"></span><span data-v="4"></span>
+                    </div>
+                    <div class="heat-legend">
+                        <span style="background:rgba(45,0,0,.06)"></span>
+                        <span style="background:rgba(109,8,8,.18)"></span>
+                        <span style="background:rgba(109,8,8,.38)"></span>
+                        <span style="background:rgba(109,8,8,.62)"></span>
+                        <span style="background:rgba(109,8,8,.9)"></span>
+                        <span style="margin-left:8px">More</span>
+                    </div>
+                </article>
+            </section>
+
+            <!-- ============================================================
+                 PANEL: SECURITY
+                 ============================================================ -->
+            <section class="panel" id="security" aria-label="Security">
+                <div class="panel__head">
+                    <div>
+                        <span class="eyebrow">Security</span>
+                        <h1 class="display">Access, sessions, and the audit trail.</h1>
+                        <p>Who can reach what, how sessions are behaving, and every administrative change.</p>
+                    </div>
+                    <div class="panel__actions">
+                        <a class="btn btn--ghost" href="../404.html">Review policies</a>
+                        <a class="btn btn--solid" href="../404.html">Open audit log</a>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <article class="stat">
+                        <span class="stat__label">Active sessions</span>
+                        <strong class="stat__value">1,092</strong>
+                        <span class="stat__note">Across all regions</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Failed logins</span>
+                        <strong class="stat__value">38</strong>
+                        <span class="stat__note">Last 24 hours</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">MFA adoption</span>
+                        <strong class="stat__value">84<span class="stat__value-sub">%</span></strong>
+                        <span class="stat__note">Of admin accounts</span>
+                    </article>
+                    <article class="stat">
+                        <span class="stat__label">Audit events</span>
+                        <strong class="stat__value">312</strong>
+                        <span class="stat__note">Today</span>
+                    </article>
+                </div>
+
+                <div class="grid-2">
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Login attempts</h2>
+                                <p class="card__sub">Successful and failed attempts across 14 days</p>
+                            </div>
+                            <span class="card__chip">14 days</span>
+                        </header>
+
+                        <div class="chart chart--standard" role="img"
+                            aria-label="Login attempts across the last 14 days">
+                            <svg viewBox="0 0 800 220" preserveAspectRatio="xMidYMid meet">
+                                <g stroke="rgba(45, 0, 0, .07)" stroke-dasharray="2 4">
+                                    <line x1="20" y1="40" x2="780" y2="40" />
+                                    <line x1="20" y1="90" x2="780" y2="90" />
+                                    <line x1="20" y1="140" x2="780" y2="140" />
+                                </g>
+                                <line x1="20" y1="180" x2="780" y2="180" stroke="rgba(45, 0, 0, .18)" />
+
+                                <g fill="#6D0808">
+                                    <rect x="34" y="80" width="16" height="100" />
+                                    <rect x="88" y="60" width="16" height="120" />
+                                    <rect x="142" y="70" width="16" height="110" />
+                                    <rect x="196" y="50" width="16" height="130" />
+                                    <rect x="250" y="40" width="16" height="140" />
+                                    <rect x="304" y="55" width="16" height="125" />
+                                    <rect x="358" y="65" width="16" height="115" />
+                                    <rect x="412" y="45" width="16" height="135" />
+                                    <rect x="466" y="30" width="16" height="150" />
+                                    <rect x="520" y="35" width="16" height="145" />
+                                    <rect x="574" y="50" width="16" height="130" />
+                                    <rect x="628" y="25" width="16" height="155" />
+                                    <rect x="682" y="20" width="16" height="160" />
+                                    <rect x="736" y="15" width="16" height="165" />
+                                </g>
+                                <g fill="#757D6F">
+                                    <rect x="54" y="160" width="16" height="20" />
+                                    <rect x="108" y="155" width="16" height="25" />
+                                    <rect x="162" y="158" width="16" height="22" />
+                                    <rect x="216" y="150" width="16" height="30" />
+                                    <rect x="270" y="145" width="16" height="35" />
+                                    <rect x="324" y="152" width="16" height="28" />
+                                    <rect x="378" y="156" width="16" height="24" />
+                                    <rect x="432" y="148" width="16" height="32" />
+                                    <rect x="486" y="140" width="16" height="40" />
+                                    <rect x="540" y="144" width="16" height="36" />
+                                    <rect x="594" y="150" width="16" height="30" />
+                                    <rect x="648" y="138" width="16" height="42" />
+                                    <rect x="702" y="134" width="16" height="46" />
+                                    <rect x="756" y="130" width="16" height="50" />
+                                </g>
+
+                                <g fill="rgba(117, 125, 111, .9)" font-size="10" font-family="DM Sans, sans-serif">
+                                    <text x="20" y="205">Day 1</text>
+                                    <text x="195" y="205" text-anchor="middle">Day 4</text>
+                                    <text x="429" y="205" text-anchor="middle">Day 8</text>
+                                    <text x="663" y="205" text-anchor="middle">Day 12</text>
+                                    <text x="780" y="205" text-anchor="end">Today</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <footer class="card__foot">
+                            <span class="legend"><span class="legend__dot"></span>Successful</span>
+                            <span class="legend"><span class="legend__dot legend__dot--olive"></span>Failed</span>
+                        </footer>
+                    </article>
+
+                    <article class="card">
+                        <header class="card__head">
+                            <div>
+                                <h2 class="card__title">Security events</h2>
+                                <p class="card__sub">Notable events in the last 24 hours</p>
+                            </div>
+                            <a class="card__link" href="../404.html">Full log</a>
+                        </header>
+
+                        <div>
+                            <div class="incident incident--critical">
+                                <span class="incident__dot" aria-hidden="true"></span>
+                                <div class="incident__body">
+                                    <strong>Repeated failed logins</strong>
+                                    <p>14 failed attempts for a single account in 5 minutes. Account locked.</p>
+                                </div>
+                                <span class="incident__time">32m ago</span>
+                            </div>
+                            <div class="incident incident--warning">
+                                <span class="incident__dot" aria-hidden="true"></span>
+                                <div class="incident__body">
+                                    <strong>New device sign-in</strong>
+                                    <p>Owner account signed in from an unrecognised region.</p>
+                                </div>
+                                <span class="incident__time">2h ago</span>
+                            </div>
+                            <div class="incident incident--resolved">
+                                <span class="incident__dot" aria-hidden="true"></span>
+                                <div class="incident__body">
+                                    <strong>API key rotated</strong>
+                                    <p>Service account key for metrics-collector rotated successfully.</p>
+                                </div>
+                                <span class="incident__time">5h ago</span>
+                            </div>
+                            <div class="incident incident--resolved">
+                                <span class="incident__dot" aria-hidden="true"></span>
+                                <div class="incident__body">
+                                    <strong>Permission policy updated</strong>
+                                    <p>Workspace export permission restricted to owners and admins.</p>
+                                </div>
+                                <span class="incident__time">Yesterday</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Permission matrix</h2>
+                            <p class="card__sub">What each role can do across the platform</p>
+                        </div>
+                        <span class="card__chip">Current policy</span>
+                    </header>
+
+                    <div class="perm">
+                        <div class="perm__row perm__row--head">
+                            <span>Capability</span>
+                            <span>User</span>
+                            <span>Owner</span>
+                            <span>Admin</span>
+                            <span>Service</span>
+                        </div>
+
+                        <div class="perm__row">
+                            <span class="perm__label">Create workspace</span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                        </div>
+                        <div class="perm__row">
+                            <span class="perm__label">Manage integrations</span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                        </div>
+                        <div class="perm__row">
+                            <span class="perm__label">View analytics</span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                        </div>
+                        <div class="perm__row">
+                            <span class="perm__label">Manage users</span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                        </div>
+                        <div class="perm__row">
+                            <span class="perm__label">Access audit log</span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                        </div>
+                        <div class="perm__row">
+                            <span class="perm__label">Deploy services</span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--no"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                            <span class="perm__cell"><span class="perm__mark perm__mark--yes"></span></span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <header class="card__head">
+                        <div>
+                            <h2 class="card__title">Audit trail</h2>
+                            <p class="card__sub">Every administrative change is recorded here</p>
+                        </div>
+                        <a class="card__link" href="../404.html">Download</a>
+                    </header>
+
+                    <ol class="audit">
+                        <li class="audit__row">
+                            <span class="audit__dot audit__dot--red" aria-hidden="true"></span>
+                            <div class="audit__body">
+                                <p>Permission policy updated · <em>workspace export restricted</em></p>
+                                <span class="audit__time">32m ago · P. Raman</span>
+                            </div>
+                        </li>
+                        <li class="audit__row">
+                            <span class="audit__dot" aria-hidden="true"></span>
+                            <div class="audit__body">
+                                <p>API key rotated for <strong>metrics-collector</strong></p>
+                                <span class="audit__time">5h ago · System</span>
+                            </div>
+                        </li>
+                        <li class="audit__row">
+                            <span class="audit__dot" aria-hidden="true"></span>
+                            <div class="audit__body">
+                                <p>Rate limit policy updated on <strong>API gateway</strong></p>
+                                <span class="audit__time">18m ago · M. Raman</span>
+                            </div>
+                        </li>
+                        <li class="audit__row">
+                            <span class="audit__dot" aria-hidden="true"></span>
+                            <div class="audit__body">
+                                <p>New service account provisioned · <em>reporting-agent</em></p>
+                                <span class="audit__time">Yesterday · A. Kumar</span>
+                            </div>
+                        </li>
+                        <li class="audit__row">
+                            <span class="audit__dot" aria-hidden="true"></span>
+                            <div class="audit__body">
+                                <p>SSO configuration reviewed and approved</p>
+                                <span class="audit__time">Yesterday · P. Raman</span>
+                            </div>
+                        </li>
+                        <li class="audit__row">
+                            <span class="audit__dot" aria-hidden="true"></span>
+                            <div class="audit__body">
+                                <p>Backup snapshot verified · <em>primary database</em></p>
+                                <span class="audit__time">2 days ago · System</span>
+                            </div>
+                        </li>
+                    </ol>
+                </article>
+            </section>
+
+            <footer class="dash-foot">
+                <p>Stackly administration · platform view</p>
+                <a href="../404.html">Preferences</a>
+            </footer>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var hasGsap = !!window.gsap;
+
+            function cap(s) {
+                return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '';
+            }
+
+            function getStored(key) {
+                try { return sessionStorage.getItem(key) || ''; } catch (err) { return ''; }
+            }
+
+            /* ============================================================
+               IDENTITY
+               ============================================================ */
+            var rawName = getStored('stackly.name');
+            var rawEmail = getStored('stackly.email');
+            var role = getStored('stackly.role') || 'admin';
+
+            var localName = rawName ? cap(rawName.split(/[._\-+]/)[0]) : '';
+            var displayName = localName || 'Admin';
+            var initials = localName ? localName.slice(0, 2).toUpperCase() : 'GA';
+            var email = rawEmail || (localName ? localName.toLowerCase() + '@stackly.com' : 'admin@stackly.com');
+
+            var topAvatar = document.getElementById('topAvatar');
+            if (topAvatar) topAvatar.textContent = initials;
+
+            var topEmail = document.getElementById('topEmail');
+            if (topEmail) topEmail.textContent = email;
+
+            var sideAvatar = document.getElementById('sideAvatar');
+            if (sideAvatar) sideAvatar.textContent = initials;
+
+            var sideName = document.getElementById('sideName');
+            if (sideName) sideName.textContent = localName ? localName : 'Admin';
+
+            var sideEmail = document.getElementById('sideEmail');
+            if (sideEmail) sideEmail.textContent = email;
+
+            var hour = new Date().getHours();
+            var greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+
+            var helloName = document.getElementById('helloName');
+            if (helloName) {
+                helloName.innerHTML = greeting + ', <em>' + displayName + '</em>.';
+            }
+
+            var helloDate = document.getElementById('helloDate');
+            if (helloDate) {
+                var now = new Date();
+                var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                var months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+                helloDate.textContent = days[now.getDay()] + ' · ' +
+                    now.getDate() + ' ' + months[now.getMonth()];
+            }
+
+            /* ============================================================
+               PANEL SWITCHING
+               ============================================================ */
+            var sideLinks = document.querySelectorAll('.side__link');
+            var panels = document.querySelectorAll('.panel');
+            var firstTarget = 'command';
+
+            function animatePanel(targetId) {
+                if (!hasGsap || reduce) return;
+                var panel = document.getElementById(targetId);
+                if (!panel) return;
+
+                var head = panel.querySelector('.panel__head > *');
+                if (head) {
+                    gsap.fromTo(head, { y: 18, opacity: 0 },
+                        { y: 0, opacity: 1, duration: .55, ease: 'power3.out' });
+                }
+
+                var stats = panel.querySelectorAll('.stat');
+                if (stats.length) {
+                    gsap.fromTo(stats, { y: 20, opacity: 0 },
+                        { y: 0, opacity: 1, duration: .55, stagger: .05, ease: 'power3.out', delay: .08 });
+                }
+
+                var cards = panel.querySelectorAll('.card');
+                if (cards.length) {
+                    gsap.fromTo(cards, { y: 24, opacity: 0 },
+                        { y: 0, opacity: 1, duration: .6, stagger: .06, ease: 'power3.out', delay: .14 });
+                }
+            }
+
+            function drawPanelExtras(panel) {
+                if (!panel) return;
+
+                if (hasGsap && !reduce) {
+                    panel.querySelectorAll('.chart__line').forEach(function (line) {
+                        if (line.dataset.drawn === '1') return;
+                        if (typeof line.getTotalLength !== 'function') return;
+                        try {
+                            var len = line.getTotalLength();
+                            gsap.set(line, { strokeDasharray: len, strokeDashoffset: len });
+                            gsap.to(line, {
+                                strokeDashoffset: 0, duration: 1.6, ease: 'power3.out', delay: .25,
+                                onComplete: function () { line.dataset.drawn = '1'; }
+                            });
+                        } catch (err) { /* noop */ }
+                    });
+
+                    panel.querySelectorAll('.chart__area').forEach(function (area) {
+                        if (area.dataset.drawn === '1') return;
+                        gsap.from(area, {
+                            opacity: 0, duration: 1, ease: 'power2.out', delay: .4,
+                            onComplete: function () { area.dataset.drawn = '1'; }
+                        });
+                    });
+
+                    panel.querySelectorAll('.radial__arc').forEach(function (arc) {
+                        if (arc.dataset.drawn === '1') return;
+                        var dash = arc.getAttribute('stroke-dasharray') || '0 100';
+                        var end = parseFloat(dash.split(' ')[0]) || 0;
+                        gsap.fromTo(arc,
+                            { strokeDasharray: '0 100' },
+                            {
+                                strokeDasharray: end + ' 100',
+                                duration: 1.2, ease: 'power3.out', delay: .2,
+                                onComplete: function () { arc.dataset.drawn = '1'; }
+                            });
+                    });
+                }
+
+                panel.querySelectorAll('.bar__track > span, .service__bar > span').forEach(function (bar) {
+                    var w = bar.dataset.w || bar.style.width || '0%';
+                    bar.dataset.w = w;
+                    if (hasGsap && !reduce) {
+                        gsap.fromTo(bar, { width: 0 }, { width: w, duration: 1, ease: 'power3.out', delay: .1 });
+                    } else {
+                        bar.style.width = w;
+                    }
+                });
+            }
+
+            function setActive(targetId, animate) {
+                var found = false;
+                panels.forEach(function (panel) {
+                    var isTarget = panel.id === targetId;
+                    panel.classList.toggle('is-active', isTarget);
+                    if (isTarget) found = true;
+                });
+
+                if (!found) {
+                    targetId = firstTarget;
+                    panels.forEach(function (panel) {
+                        panel.classList.toggle('is-active', panel.id === firstTarget);
+                    });
+                }
+
+                sideLinks.forEach(function (link) {
+                    var isTarget = link.dataset.target === targetId;
+                    link.classList.toggle('is-active', isTarget);
+                    if (isTarget) link.setAttribute('aria-current', 'page');
+                    else link.removeAttribute('aria-current');
+                });
+
+                if (animate) animatePanel(targetId);
+
+                var panel = document.getElementById(targetId);
+                if (panel) {
+                    window.setTimeout(function () { drawPanelExtras(panel); }, 60);
+                }
+            }
+
+            sideLinks.forEach(function (link) {
+                link.addEventListener('click', function () {
+                    var target = link.dataset.target;
+                    if (!target) return;
+                    setActive(target, true);
+                    closeSide();
+                    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+                });
+            });
+
+            /* ============================================================
+               LOGO — reload & open first section
+               ============================================================ */
+            var sideLogo = document.getElementById('sideLogo');
+            if (sideLogo) {
+                sideLogo.addEventListener('click', function (e) {
+                    if (window.location.hash === '' && !e.metaKey && !e.ctrlKey) {
+                        e.preventDefault();
+                        window.location.reload();
+                    }
+                });
+            }
+
+            /* ============================================================
+               MOBILE DRAWER
+               ============================================================ */
+            var menuToggle = document.getElementById('menuToggle');
+            var side = document.getElementById('side');
+            var overlay = document.getElementById('overlay');
+
+            function openSide() {
+                if (!side || !overlay) return;
+                side.classList.add('is-open');
+                overlay.classList.add('is-open');
+                document.body.classList.add('no-scroll');
+                if (menuToggle) menuToggle.setAttribute('aria-expanded', 'true');
+            }
+
+            function closeSide() {
+                if (!side || !overlay) return;
+                side.classList.remove('is-open');
+                overlay.classList.remove('is-open');
+                document.body.classList.remove('no-scroll');
+                if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+            }
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function () {
+                    if (side.classList.contains('is-open')) closeSide();
+                    else openSide();
+                });
+            }
+            if (overlay) overlay.addEventListener('click', closeSide);
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && side && side.classList.contains('is-open')) closeSide();
+            });
+
+            /* ============================================================
+               BOOT
+               ============================================================ */
+            setActive(firstTarget, false);
+
+            if (hasGsap && !reduce) {
+                try { gsap.registerPlugin(window.ScrollTrigger); } catch (err) { /* noop */ }
+
+                window.setTimeout(function () {
+                    var active = document.querySelector('.panel.is-active');
+                    if (!active) return;
+
+                    var head = active.querySelector('.panel__head > *');
+                    if (head) gsap.fromTo(head, { y: 18, opacity: 0 },
+                        { y: 0, opacity: 1, duration: .6, ease: 'power3.out' });
+
+                    var stats = active.querySelectorAll('.stat');
+                    if (stats.length) gsap.fromTo(stats, { y: 20, opacity: 0 },
+                        { y: 0, opacity: 1, duration: .55, stagger: .05, ease: 'power3.out', delay: .1 });
+
+                    var cards = active.querySelectorAll('.card');
+                    if (cards.length) gsap.fromTo(cards, { y: 24, opacity: 0 },
+                        { y: 0, opacity: 1, duration: .6, stagger: .06, ease: 'power3.out', delay: .16 });
+
+                    drawPanelExtras(active);
+                }, 100);
+            } else {
+                document.querySelectorAll('.bar__track > span, .service__bar > span').forEach(function (bar) {
+                    var w = bar.dataset.w || '0%';
+                    bar.style.width = w;
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>

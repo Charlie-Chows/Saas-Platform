@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2D0000">
+    <meta name="description"
+        content="Stackly services — implementation, workspace design, automation, integrations, enablement, and support for modern teams.">
+    <title>Services — Stackly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="../global.css">
+    <link rel="stylesheet" href="../css/services.css">
+</head>
+
+<body>
+    <header class="site-header" id="siteHeader">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html" aria-label="Stackly home"><img src="../logo.webp"
+                    alt="Stackly"></a>
+            <nav class="desktop-nav" aria-label="Primary navigation">
+                <a href="../index.html">Home</a>
+                <a href="about.html">About</a>
+                <a class="active" href="services.html" aria-current="page">Services</a>
+                <a href="blog.html">Blog</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="header-right">
+                <a class="header-login" href="login.html">Login</a>
+                <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-controls="mobileMenu"
+                    aria-expanded="false"><span></span><span></span></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-menu__top"><img class="mobile-menu__logo" src="../logo.webp" alt="Stackly"><button
+                class="mobile-menu__close" id="menuClose" aria-label="Close menu">×</button></div>
+        <nav class="mobile-menu__nav" aria-label="Mobile navigation">
+            <a href="../index.html"><span>Home</span></a>
+            <a href="about.html"><span>About</span></a>
+            <a href="services.html"><span>Services</span></a>
+            <a href="blog.html"><span>Blog</span></a>
+            <a href="contact.html"><span>Contact</span></a>
+            <a class="mobile-menu__login" href="login.html"><span>Login</span></a>
+        </nav>
+        <div class="mobile-menu__bottom"><span>Software for teams that move with intent.</span><span>Salem ·
+                India</span></div>
+    </div>
+
+    <main>
+
+        <!-- ============ HERO ============ -->
+        <section class="sv-hero">
+            <div class="sv-hero__glow" aria-hidden="true"></div>
+            <div class="sv-hero__inner">
+                <div class="sv-hero__copy reveal-left">
+                    <span class="eyebrow">Services</span>
+                    <h1 class="display">Help getting the platform to fit the way your team already works.</h1>
+                    <p class="sv-hero__lead">Stackly services cover the work around the software — mapping your
+                        operating model, designing the workspace, connecting systems, and making sure people actually
+                        use it.</p>
+                    <div class="sv-hero__actions">
+                        <a class="btn btn--solid" href="contact.html">Talk to our team</a>
+                        <a class="btn btn--light" href="about.html">How we work</a>
+                    </div>
+                </div>
+
+                <div class="sv-hero__visual reveal-right">
+                    <div class="sv-hero__photo media-frame">
+                        <img src="../assets/photo_1552664730.webp"
+                            alt="Team reviewing a workspace plan together around a table">
+                    </div>
+                    <div class="sv-hero__panel reveal-up">
+                        <div class="sv-hero__panel-head">
+                            <span>Engagement snapshot</span>
+                            <span class="sv-hero__dot"></span>
+                        </div>
+                        <div class="sv-hero__panel-row"><span>Discovery & mapping</span><span>Week 1</span></div>
+                        <div class="sv-hero__panel-row"><span>Workspace design</span><span>Week 2–3</span></div>
+                        <div class="sv-hero__panel-row"><span>Integration setup</span><span>Week 3–4</span></div>
+                        <div class="sv-hero__panel-row"><span>Enablement</span><span>Ongoing</span></div>
+                        <small>Illustrative engagement outline — sample data</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sv-hero__band">
+                <div class="container sv-hero__band-inner">
+                    <div class="reveal-left"><strong>Implementation</strong><span>Guided workspace setup</span></div>
+                    <div class="reveal-up"><strong>Integrations</strong><span>Connected systems and data</span></div>
+                    <div class="reveal-right"><strong>Enablement</strong><span>Adoption that sticks</span></div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============ ENGAGEMENT MODELS ============ -->
+        <section class="sv-engage section-pad">
+            <div class="container">
+                <div class="sv-engage__head reveal-left">
+                    <span class="eyebrow">Engagement models</span>
+                    <h2 class="display">Three ways to work with us.</h2>
+                    <p>Scope changes by team, stage, and complexity. These are the shapes most engagements take.</p>
+                </div>
+
+                <div class="sv-engage__grid">
+                    <article class="sv-engage__card reveal-up">
+                        <span class="sv-engage__tag">Guided</span>
+                        <h3>Self-serve with support</h3>
+                        <p>You configure the workspace with our documentation and a named contact for questions. Best
+                            for smaller teams with a clear operating model already in place.</p>
+                        <ul>
+                            <li>Workspace setup guidance</li>
+                            <li>Documented patterns</li>
+                            <li>Async support channel</li>
+                        </ul>
+                    </article>
+
+                    <article class="sv-engage__card sv-engage__card--feature reveal-up">
+                        <span class="sv-engage__tag">Co-built</span>
+                        <h3>Implementation partnership</h3>
+                        <p>We work alongside your team to map the operating model, design the workspace, and connect
+                            the systems that matter — then hand over with it running.</p>
+                        <ul>
+                            <li>Discovery and workflow mapping</li>
+                            <li>Workspace architecture</li>
+                            <li>Integration setup</li>
+                            <li>Team enablement sessions</li>
+                        </ul>
+                    </article>
+
+                    <article class="sv-engage__card reveal-up">
+                        <span class="sv-engage__tag">Ongoing</span>
+                        <h3>Continuous advisory</h3>
+                        <p>A standing relationship for teams whose workflows keep evolving. Regular reviews, refinement
+                            of automation, and help when new systems arrive.</p>
+                        <ul>
+                            <li>Quarterly workflow reviews</li>
+                            <li>Automation refinement</li>
+                            <li>Priority support</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ IMPLEMENTATION ============ -->
+        <section class="sv-impl section-pad">
+            <div class="container sv-impl__grid">
+                <div class="sv-impl__media reveal-image-left">
+                    <div class="media-frame">
+                        <img src="../assets/photo_1531482615.webp"
+                            alt="Colleagues mapping a process on a whiteboard" loading="lazy">
+                    </div>
+                    <div class="sv-impl__tag reveal-right">
+                        <strong>Implementation</strong>
+                        <span>From scattered tools to a single operating view.</span>
+                    </div>
+                </div>
+
+                <div class="sv-impl__copy reveal-right">
+                    <span class="eyebrow">Implementation</span>
+                    <h2 class="display">The workspace is designed before it is built.</h2>
+                    <p>Most platform rollouts fail quietly — not because the software is wrong, but because nobody
+                        agreed on what it was supposed to represent. We spend the first part of every engagement on that
+                        question.</p>
+
+                    <div class="sv-impl__steps">
+                        <div class="sv-impl__step">
+                            <span aria-hidden="true"></span>
+                            <div>
+                                <h3>Map the operating model</h3>
+                                <p>Who owns what, where decisions land, and which signals actually drive action.</p>
+                            </div>
+                        </div>
+                        <div class="sv-impl__step">
+                            <span aria-hidden="true"></span>
+                            <div>
+                                <h3>Design the workspace</h3>
+                                <p>Structure, permissions, naming, and views shaped around the mapped model.</p>
+                            </div>
+                        </div>
+                        <div class="sv-impl__step">
+                            <span aria-hidden="true"></span>
+                            <div>
+                                <h3>Configure and connect</h3>
+                                <p>Build it out, link the systems, and run it against real work before wider rollout.</p>
+                            </div>
+                        </div>
+                        <div class="sv-impl__step">
+                            <span aria-hidden="true"></span>
+                            <div>
+                                <h3>Hand over running</h3>
+                                <p>Your team owns it from day one, with the reasoning documented alongside it.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ WORKSPACE ARCHITECTURE ============ -->
+        <section class="sv-arch">
+            <div class="sv-arch__glow" aria-hidden="true"></div>
+            <div class="container sv-arch__inner">
+                <div class="sv-arch__head reveal-left">
+                    <span class="eyebrow">Workspace architecture</span>
+                    <h2 class="display">Structured so it still makes sense in a year.</h2>
+                    <p>A workspace that grows without a plan becomes an archive. We design the structure to stay
+                        legible as teams, projects, and priorities change.</p>
+                </div>
+
+                <figure class="sv-arch__diagram reveal-image-right">
+                    <svg viewBox="0 0 980 420" role="img"
+                        aria-label="Illustrative diagram of a layered workspace architecture">
+                        <line x1="60" y1="360" x2="920" y2="360" stroke="rgba(238,234,215,.14)" stroke-width="1" />
+
+                        <rect x="70" y="300" width="250" height="46" fill="rgba(238,234,215,.1)"
+                            stroke="rgba(238,234,215,.18)" />
+                        <text x="90" y="328" fill="rgba(238,234,215,.6)" font-size="13"
+                            font-family="DM Sans, sans-serif">Signals &amp; inputs</text>
+
+                        <rect x="365" y="300" width="250" height="46" fill="rgba(238,234,215,.1)"
+                            stroke="rgba(238,234,215,.18)" />
+                        <text x="385" y="328" fill="rgba(238,234,215,.6)" font-size="13"
+                            font-family="DM Sans, sans-serif">Workspaces</text>
+
+                        <rect x="660" y="300" width="250" height="46" fill="rgba(238,234,215,.1)"
+                            stroke="rgba(238,234,215,.18)" />
+                        <text x="680" y="328" fill="rgba(238,234,215,.6)" font-size="13"
+                            font-family="DM Sans, sans-serif">Ownership</text>
+
+                        <rect x="150" y="210" width="680" height="52" fill="#6D0808" />
+                        <text x="176" y="242" fill="#EEEAD7" font-size="14" font-weight="600"
+                            font-family="DM Sans, sans-serif">Operating layer — context, decisions, movement</text>
+
+                        <rect x="220" y="140" width="540" height="40" fill="rgba(238,234,215,.24)" />
+                        <text x="246" y="166" fill="rgba(238,234,215,.85)" font-size="13"
+                            font-family="DM Sans, sans-serif">Permissions &amp; access model</text>
+
+                        <rect x="310" y="80" width="360" height="36" fill="rgba(238,234,215,.5)" />
+                        <text x="334" y="104" fill="#2D0000" font-size="13" font-weight="600"
+                            font-family="DM Sans, sans-serif">Team structure</text>
+
+                        <circle cx="490" cy="52" r="8" fill="#EEEAD7" />
+                        <line x1="490" y1="60" x2="490" y2="360" stroke="rgba(238,234,215,.2)"
+                            stroke-dasharray="4 7" />
+                    </svg>
+                    <figcaption>Illustrative architecture — layered, not stacked</figcaption>
+                </figure>
+
+                <div class="sv-arch__notes">
+                    <div class="reveal-left">
+                        <h3>Built to be read</h3>
+                        <p>Anyone joining a workspace should be able to understand its structure without a handover
+                            call.</p>
+                    </div>
+                    <div class="reveal-up">
+                        <h3>Built to be changed</h3>
+                        <p>Structure that cannot adapt becomes a constraint. We design for the first revision, not just
+                            the first launch.</p>
+                    </div>
+                    <div class="reveal-right">
+                        <h3>Built to be trusted</h3>
+                        <p>Access, ownership, and visibility are decided deliberately, not left to defaults.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ INTEGRATIONS ============ -->
+        <section class="sv-integrations section-pad">
+            <div class="container">
+                <div class="section-intro">
+                    <div class="reveal-left"><span class="eyebrow">Integration services</span></div>
+                    <div class="reveal-right">
+                        <h2 class="display">Bring the systems together, keep the ones that work.</h2>
+                        <p>We connect the tools your team already relies on so the important context shows up in one
+                            place — without forcing a migration nobody asked for.</p>
+                    </div>
+                </div>
+
+                <div class="sv-integrations__grid">
+                    <div class="sv-integrations__categories reveal-left">
+                        <div class="sv-integrations__cat">
+                            <span class="sv-integrations__cat-mark" aria-hidden="true"></span>
+                            <h3>Project &amp; issue systems</h3>
+                            <p>Keep delivery work visible alongside the decisions that shaped it.</p>
+                        </div>
+                        <div class="sv-integrations__cat">
+                            <span class="sv-integrations__cat-mark" aria-hidden="true"></span>
+                            <h3>Communication tools</h3>
+                            <p>Surface the updates that matter without adding another channel.</p>
+                        </div>
+                        <div class="sv-integrations__cat">
+                            <span class="sv-integrations__cat-mark" aria-hidden="true"></span>
+                            <h3>Data sources</h3>
+                            <p>Pull operational context in without duplicating where it lives.</p>
+                        </div>
+                        <div class="sv-integrations__cat">
+                            <span class="sv-integrations__cat-mark" aria-hidden="true"></span>
+                            <h3>Identity &amp; access</h3>
+                            <p>Keep permissions aligned with the way your organisation already manages them.</p>
+                        </div>
+                        <div class="sv-integrations__cat">
+                            <span class="sv-integrations__cat-mark" aria-hidden="true"></span>
+                            <h3>Calendar &amp; scheduling</h3>
+                            <p>Tie reviews and checkpoints to the work they belong to.</p>
+                        </div>
+                        <div class="sv-integrations__cat">
+                            <span class="sv-integrations__cat-mark" aria-hidden="true"></span>
+                            <h3>Operational systems</h3>
+                            <p>Connect the internal tools that keep the business running day to day.</p>
+                        </div>
+                    </div>
+
+                    <figure class="sv-integrations__media reveal-image-right">
+                        <img src="../assets/photo_1558494949.webp"
+                            alt="Technology infrastructure representing connected systems" loading="lazy">
+                        <figcaption>Illustrative systems environment</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ENABLEMENT ============ -->
+        <section class="sv-enable section-pad">
+            <div class="container sv-enable__grid">
+                <div class="sv-enable__media reveal-image-left">
+                    <div class="media-frame">
+                        <img src="../assets/photo_1552664730.webp"
+                            alt="Team in a working session around a shared table" loading="lazy">
+                    </div>
+                    <div class="sv-enable__float reveal-up">
+                        <strong>Enablement is part of rollout</strong>
+                        <span>Not a training session added at the end.</span>
+                    </div>
+                </div>
+
+                <div class="sv-enable__copy reveal-right">
+                    <span class="eyebrow">Enablement</span>
+                    <h2 class="display">Adoption is designed, not announced.</h2>
+                    <p>Most tools fail quietly. People keep a private workaround because the new system did not match
+                        their reality. We design the rollout to close that gap before it opens.</p>
+
+                    <div class="sv-enable__list">
+                        <div>
+                            <h3>Role-based walkthroughs</h3>
+                            <p>Sessions built around what each role actually does, not a generic product tour.</p>
+                        </div>
+                        <div>
+                            <h3>Written operating notes</h3>
+                            <p>How the workspace works, why it is structured that way, and what to change when it
+                                evolves.</p>
+                        </div>
+                        <div>
+                            <h3>Champions inside the team</h3>
+                            <p>We work with people who will carry the practice forward after the engagement ends.</p>
+                        </div>
+                        <div>
+                            <h3>Checkpoints after launch</h3>
+                            <p>Short reviews at two weeks and six weeks, when the real friction shows up.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ SUPPORT & SUCCESS ============ -->
+        <section class="sv-support">
+            <div class="sv-support__media">
+                <img src="../assets/photo_1497366754.webp"
+                    alt="Calm office interior used as a background for the support section" loading="lazy">
+            </div>
+            <div class="container sv-support__inner">
+                <div class="sv-support__copy reveal-left">
+                    <span class="eyebrow">Support &amp; success</span>
+                    <h2 class="display">Someone who knows your workspace, not just the product.</h2>
+                    <p>Support works best when the person answering already understands how your team operates. That is
+                        the difference between a ticket closed and a problem solved.</p>
+                </div>
+
+                <div class="sv-support__points">
+                    <article class="reveal-right">
+                        <h3>Named contact</h3>
+                        <p>A consistent point of contact rather than a rotating queue.</p>
+                    </article>
+                    <article class="reveal-left">
+                        <h3>Context carried forward</h3>
+                        <p>Your structure, integrations, and history stay part of the conversation.</p>
+                    </article>
+                    <article class="reveal-right">
+                        <h3>Reviews, not just fixes</h3>
+                        <p>Periodic checks on how the workspace is holding up against how the team has changed.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ PROCESS ============ -->
+        <section class="sv-process section-pad">
+            <div class="container">
+                <div class="sv-process__head reveal-left">
+                    <span class="eyebrow">How an engagement runs</span>
+                    <h2 class="display">A sequence, not a scramble.</h2>
+                    <p>Every engagement moves through the same broad shape. Timing flexes; the order does not.</p>
+                </div>
+
+                <div class="sv-process__track">
+                    <div class="sv-process__rail" aria-hidden="true"></div>
+
+                    <article class="sv-process__step reveal-up">
+                        <div class="sv-process__marker" aria-hidden="true"></div>
+                        <h3>Understand</h3>
+                        <p>We learn how work actually moves through your team before proposing anything.</p>
+                    </article>
+
+                    <article class="sv-process__step reveal-up">
+                        <div class="sv-process__marker" aria-hidden="true"></div>
+                        <h3>Design</h3>
+                        <p>The workspace structure, permissions, and flows are agreed on paper first.</p>
+                    </article>
+
+                    <article class="sv-process__step reveal-up">
+                        <div class="sv-process__marker" aria-hidden="true"></div>
+                        <h3>Build</h3>
+                        <p>Configuration and integrations are set up and tested against real work.</p>
+                    </article>
+
+                    <article class="sv-process__step reveal-up">
+                        <div class="sv-process__marker" aria-hidden="true"></div>
+                        <h3>Enable</h3>
+                        <p>Teams are brought in with role-based walkthroughs and written notes.</p>
+                    </article>
+
+                    <article class="sv-process__step reveal-up">
+                        <div class="sv-process__marker" aria-hidden="true"></div>
+                        <h3>Refine</h3>
+                        <p>Checkpoints after launch catch the friction that only appears in use.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ JOURNAL ============ -->
+        <section class="sv-journal section-pad">
+            <div class="container">
+                <div class="section-intro">
+                    <div class="reveal-left"><span class="eyebrow">From the journal</span></div>
+                    <div class="reveal-right">
+                        <h2 class="display">Notes on setup, adoption, and operating well.</h2>
+                        <p>Short perspectives on what actually happens when a platform meets a real team.</p>
+                    </div>
+                </div>
+
+                <div class="sv-journal__grid">
+                    <article class="sv-journal__item reveal-left">
+                        <div class="sv-journal__image media-frame">
+                            <img src="../assets/photo_1517245386.webp"
+                                alt="Person working at a desk with a laptop" loading="lazy">
+                        </div>
+                        <span class="sv-journal__meta">Implementation</span>
+                        <h3>Why most platform rollouts stall in week three.</h3>
+                        <p>The launch goes fine. The friction arrives once the novelty wears off and real work returns.
+                        </p>
+                        <a class="sv-journal__link" href="../404.html">Read perspective</a>
+                    </article>
+
+                    <article class="sv-journal__item reveal-up">
+                        <div class="sv-journal__image media-frame">
+                            <img src="../assets/photo_1497366216.webp"
+                                alt="Open collaborative workspace interior" loading="lazy">
+                        </div>
+                        <span class="sv-journal__meta">Adoption</span>
+                        <h3>The private workaround is a design signal.</h3>
+                        <p>When people keep a spreadsheet alongside the platform, that spreadsheet is telling you
+                            something.</p>
+                        <a class="sv-journal__link" href="../404.html">Read perspective</a>
+                    </article>
+
+                    <article class="sv-journal__item reveal-right">
+                        <div class="sv-journal__image media-frame">
+                            <img src="../assets/photo_1556761175.webp"
+                                alt="People reviewing information together at a table" loading="lazy">
+                        </div>
+                        <span class="sv-journal__meta">Operations</span>
+                        <h3>Designing permissions people can actually reason about.</h3>
+                        <p>Access models fail when nobody can explain them without opening the admin panel.</p>
+                        <a class="sv-journal__link" href="../404.html">Read perspective</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ FINAL CTA ============ -->
+        <section class="cta">
+            <div class="cta__inner">
+                <div class="reveal-left">
+                    <span class="eyebrow">Ready when you are</span>
+                    <h2 class="display">Let's scope what your team actually needs.</h2>
+                    <p>Tell us where the friction sits. We will tell you honestly whether services are the right answer
+                        — and what the engagement would look like.</p>
+                </div>
+                <div class="reveal-right">
+                    <a class="btn btn--light" href="contact.html">Talk to our team</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer__main">
+            <div class="footer-brand"><img src="../logo.webp" alt="Stackly">
+                <p>A focused SaaS platform for teams that want clearer workflows, stronger context, and better ways to
+                    move work forward.</p>
+                <div class="footer-socials-brand">
+                    <a href="../404.html" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg></a>
+                    <a href="../404.html" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                    <a href="../404.html" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    <a href="../404.html" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">Navigation</div>
+                <div class="footer-links">
+                    <a href="../index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="services.html">Services</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">Explore</div>
+                <div class="footer-links">
+                    <a href="../404.html">Product</a>
+                    <a href="../404.html">Documentation</a>
+                    <a href="../404.html">Status</a>
+                    <a href="../404.html">Careers</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-title">Contact</div>
+                <div class="footer-links">
+                    <a class="footer-contact-item" href="../404.html"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>Stackly, Salem, TN, India</span></a>
+                    <a class="footer-contact-item" href="../404.html"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span>+1 (800) 555-0199</span></a>
+                    <a class="footer-contact-item" href="../404.html"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span>hello@stackly.com</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="site-footer__bottom"><span>© 2026 Stackly SaaS</span>
+            <div class="footer-legal-links"><a href="../404.html">Privacy Policy</a><a href="../404.html">Terms</a><a href="../404.html">Legal</a></div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+        (function () {
+            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            window.addEventListener('load', function () { window.scrollTo(0, 0); });
+
+            const header = document.getElementById('siteHeader');
+            const toggle = document.getElementById('menuToggle');
+            const menu = document.getElementById('mobileMenu');
+            const close = document.getElementById('menuClose');
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const setHeader = () => header.classList.toggle('scrolled', window.scrollY > 30);
+            setHeader();
+            window.addEventListener('scroll', setHeader, { passive: true });
+
+            function openMenu() {
+                menu.classList.add('is-open');
+                menu.setAttribute('aria-hidden', 'false');
+                toggle.setAttribute('aria-expanded', 'true');
+                document.body.classList.add('menu-open');
+                if (window.gsap && !reduce) {
+                    gsap.fromTo('.mobile-menu__nav a span',
+                        { y: 70, opacity: 0 },
+                        { y: 0, opacity: 1, duration: .65, stagger: .06, ease: 'power4.out', delay: .12 });
+                }
+            }
+
+            function closeMenu() {
+                menu.classList.remove('is-open');
+                menu.setAttribute('aria-hidden', 'true');
+                toggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
+            }
+
+            toggle.addEventListener('click', openMenu);
+            close.addEventListener('click', closeMenu);
+            menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
+            });
+
+            if (!window.gsap || reduce) return;
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.utils.toArray('.reveal-left').forEach(el => gsap.fromTo(el,
+                { x: -75, opacity: 0 },
+                { x: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+
+            gsap.utils.toArray('.reveal-right').forEach(el => gsap.fromTo(el,
+                { x: 75, opacity: 0 },
+                { x: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+
+            gsap.utils.toArray('.reveal-up').forEach(el => gsap.fromTo(el,
+                { y: 55, opacity: 0 },
+                { y: 0, opacity: 1, duration: .85, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } }));
+
+            gsap.utils.toArray('.reveal-image-left').forEach(el => gsap.fromTo(el,
+                { x: -90, opacity: 0, clipPath: 'inset(0 14% 0 14%)' },
+                { x: 0, opacity: 1, clipPath: 'inset(0 0% 0 0%)', duration: 1.15, ease: 'power4.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+
+            gsap.utils.toArray('.reveal-image-right').forEach(el => gsap.fromTo(el,
+                { x: 90, opacity: 0, clipPath: 'inset(0 14% 0 14%)' },
+                { x: 0, opacity: 1, clipPath: 'inset(0 0% 0 0%)', duration: 1.15, ease: 'power4.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+
+            gsap.fromTo('.sv-hero__copy', { x: -70, opacity: 0 },
+                { x: 0, opacity: 1, duration: 1.1, ease: 'power4.out', delay: .15 });
+            gsap.fromTo('.sv-hero__visual', { x: 70, opacity: 0 },
+                { x: 0, opacity: 1, duration: 1.15, ease: 'power4.out', delay: .3 });
+
+            gsap.utils.toArray('.sv-process__step').forEach((el, i) => {
+                gsap.to(el.querySelector('.sv-process__marker'), {
+                    scale: 1,
+                    duration: .5,
+                    ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+                    delay: i * .06
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

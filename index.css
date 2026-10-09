@@ -852,12 +852,25 @@
 
 .insight {
     border-top: 1px solid var(--ink);
-    padding-top: 16px
+    padding-top: 16px;
+    transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
 .insight__image {
     height: 250px;
-    margin-bottom: 22px
+    margin-bottom: 22px;
+    overflow: hidden;
+}
+
+.insight__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.insight:hover .insight__image img {
+    transform: scale(1.08);
 }
 
 .insight__meta {
@@ -870,7 +883,12 @@
 .insight h3 {
     font: 700 1.6rem var(--display);
     line-height: 1.08;
-    margin: 10px 0
+    margin: 10px 0;
+    transition: color 0.3s ease;
+}
+
+.insight:hover h3 {
+    color: var(--red);
 }
 
 .insight p {
@@ -885,7 +903,12 @@
     text-transform: uppercase;
     letter-spacing: .12em;
     border-bottom: 1px solid var(--red);
-    padding-bottom: 4px
+    padding-bottom: 4px;
+    transition: letter-spacing 0.3s ease, color 0.3s ease;
+}
+
+.insight:hover .insight__link {
+    letter-spacing: .16em;
 }
 
 .why {
